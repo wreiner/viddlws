@@ -90,6 +90,9 @@
                                     </div>
                                     <div class="col-lg-8">
                                         <p class="text-left"><strong>{{ request.user.username }}</strong></p>
+                                        {% if request.user.username == "admin" %}
+                                        <p><a href="/admin/">Django Admin</a></p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
