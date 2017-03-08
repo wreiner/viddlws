@@ -25,6 +25,14 @@ python manage.py runserver 0.0.0.0:8001
 video_download_dir: /usr/share/viddlws/downloads
 ```
 
-### Development
+### Production
 
 The use of the build-in development server is discouraged for productional use.
+
+## Screenshots
+
+![Video Overview](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-video_overview.png)
+
+![Adding Video](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-add-video.png)
+
+![Video Details](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-video-detail.png)
