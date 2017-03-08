@@ -1,0 +1,13 @@
+# standard ignores for Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ignores for Django
+#settings.py
+
+# ignores for viddlws
+downloads/*
+db.sqlite3 
+*.log 
+

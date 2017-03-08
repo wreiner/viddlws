@@ -1,0 +1,3 @@
+django-braces
+django-taggit
+youtube-dl
