@@ -70,6 +70,10 @@ class Video(models.Model):
         name, extension = os.path.splitext(self.filename)
         return "%s.jpg" % (name)
 
+    def audiofile(self):
+        name, extension = os.path.splitext(self.filename)
+        return "%s.mp3" % (name)
+
     def videotype(self):
         name, extension = os.path.splitext(self.filename)
         return "video/%s" % (extension[1:])

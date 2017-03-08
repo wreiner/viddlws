@@ -29,7 +29,7 @@
     <div class="row">
         <div class="col-lg-6">
             <video id="my-video" class="video-js" controls preload="auto" width="640"
-                poster="{{video.thumbnailfile" data-setup="{}">
+                poster="/static/{{video.thumbnailfile}}" data-setup="{}">
                 <source src="/static/{{video.filename}}" type='{{video.videotype}}'>
 
                 <p class="vjs-no-js">
@@ -45,6 +45,14 @@
     <div class="row">
         <div class="col-lg-6">
             <p><h4>{{video.title}}</h4>
+            <p>
+                Download: 
+                <a href="/static/{{video.filename}}">Video</a>
+                {% if video.extract_audio %}
+                | <a href="/static/{{video.audiofile}}">Audio</a>
+                {% endif %}
+                | <a href="{{video.url}}">Original Link</a>
+            </p>
             <p>
                 {% for tag in video.tags_display %}
                 <a href="/tags/{{tag.slug}}" class="label label-info">{{tag}}</a>
