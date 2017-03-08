@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # ignores for Django
-#settings.py
+settings.py
 
 # ignores for viddlws
 downloads/*
