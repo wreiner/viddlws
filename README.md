@@ -6,6 +6,10 @@ Django project which uses youtube-dl to download and serve videos.
 ### Development
 
 - Generate secret key in settings.py
+- Install requirements
+```
+pip3 install -r requirements.txt
+```
 - Configure database settings in settings.py
 - Migrate database
 ```
