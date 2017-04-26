@@ -11,3 +11,5 @@ downloads/*
 db.sqlite3 
 *.log 
 
+# environment settings for django-environ
+.env
