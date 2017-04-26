@@ -39,11 +39,16 @@
         <!-- Projects Row -->
         <div class="row">
             <div class="col-lg-12">
-                <p>
-                {% for tag in tags %}
-                <a href="/tags/{{tag.slug}}" class="label label-info">{{tag}}</a>
-                {% endfor %}
-                </p>
+		{% if tags %}
+			<p>
+			{% for tag in tags %}
+			<a href="/tags/{{tag.slug}}" class="label label-info">{{tag}}</a>
+			{% endfor %}
+			</p>
+		{% else %}
+			<p>You haven't downloaded any videos yet.</p>
+			<p><a href="/add_video/">Add a video</a></p>
+		{% endif %}
             </div>
         </div>
         <!-- /.row -->

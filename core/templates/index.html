@@ -37,30 +37,35 @@
         <!-- /.row -->
 
         <!-- Projects Row -->
-        {% for video in videos %}
-            {% if forloop.counter0|divisibleby:3 %}
-                {% if not forloop.first %}
-                    </div>
-                {% endif %}
-                <div class="row">
-            {% endif %}
-            <div class="col-md-4 portfolio-item">
-                <a href="/v/{{video.id}}/">
-                    <img class="img-responsive" height="400" src="/static/{{video.thumbnailfile}}" alt="">
-                </a>
-                <h3>
-                    <a href="/v/{{video.id}}/">{{video.title}}</a>
-                </h3>
-                <p>
-                    {% for tag in video.tags_display %}
-                    <a href="/tags/{{tag.slug}}" class="label label-info">{{tag}}</a>
-                    {% endfor %}
-                </p>
-            </div>
-        {% endfor %}
-        {% if not forloop.last %}
-            </div>
-        {% endif %}
+	{% if videos %}
+		{% for video in videos %}
+		    {% if forloop.counter0|divisibleby:3 %}
+			{% if not forloop.first %}
+			    </div>
+			{% endif %}
+			<div class="row">
+		    {% endif %}
+		    <div class="col-md-4 portfolio-item">
+			<a href="/v/{{video.id}}/">
+			    <img class="img-responsive" height="400" src="/static/{{video.thumbnailfile}}" alt="">
+			</a>
+			<h3>
+			    <a href="/v/{{video.id}}/">{{video.title}}</a>
+			</h3>
+			<p>
+			    {% for tag in video.tags_display %}
+			    <a href="/tags/{{tag.slug}}" class="label label-info">{{tag}}</a>
+			    {% endfor %}
+			</p>
+		    </div>
+		{% endfor %}
+		{% if not forloop.last %}
+		    </div>
+		{% endif %}
+	{% else %}
+		<p>You haven't downloaded any videos yet.</p>
+		<p><a href="/add_video/">Add a video</a></p>
+	{% endif %}
         <!-- /.row -->
 
         <hr>
