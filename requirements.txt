@@ -1,4 +1,6 @@
 django
 django-braces
 django-taggit
+django-environ
 youtube-dl
+whitenoise
