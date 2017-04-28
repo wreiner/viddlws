@@ -1,0 +1,23 @@
+[
+    {
+        "model": "core.videostatus", 
+        "pk": 1, 
+        "fields": {
+            "status": "new"
+        }
+    }, 
+    {
+        "model": "core.videostatus", 
+        "pk": 2, 
+        "fields": {
+            "status": "downloaded"
+        }
+    }, 
+    {
+        "model": "core.videostatus", 
+        "pk": 3, 
+        "fields": {
+            "status": "done"
+        }
+    }
+]

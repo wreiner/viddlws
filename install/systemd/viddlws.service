@@ -1,0 +1,10 @@
+[Unit]
+Description=Gunicorn instance to serve viddlws
+After=network.target
+
+[Service]
+User=viddlws
+Group=http
+WorkingDirectory=/srv/webapps/viddlws/viddlws
+Environment="PATH=/srv/webapps/viddlws/bin"
+ExecStart=/srv/webapps/viddlws/bin/gunicorn --conf /srv/webapps/viddlws/etc/gunicorn.py -m 007 viddlws.wsgi:application

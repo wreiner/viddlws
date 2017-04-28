@@ -1,0 +1,10 @@
+[
+    {
+        "model": "core.keyvaluesetting", 
+        "pk": 1, 
+        "fields": {
+            "key": "video_download_dir", 
+            "value": "/srv/webapps/viddlws/viddlws/downloads"
+        }
+    }
+]
