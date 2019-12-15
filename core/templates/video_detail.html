@@ -30,12 +30,12 @@
         <div class="col-lg-6">
             {% if video.audio_only %}
             <audio id="my-video" class="video-js" controls preload="auto" width="640"
-                poster="/static/{{video.thumbnailfile}}" data-setup="{}">
-                <source src="/static/{{video.audiofile}}" type='{{video.audiotype}}'>
+                poster="/downloads/{{video.thumbnailfile}}" data-setup="{}">
+                <source src="/downloads/{{video.audiofile}}" type='{{video.audiotype}}'>
             {% else %}
             <video id="my-video" class="video-js" controls preload="auto" width="640"
-                poster="/static/{{video.thumbnailfile}}" data-setup="{}">
-                <source src="/static/{{video.filename}}" type='{{video.videotype}}'>
+                poster="/downloads/{{video.thumbnailfile}}" data-setup="{}">
+                <source src="/downloads/{{video.filename}}" type='{{video.videotype}}'>
             {% endif %}
 
                 <p class="vjs-no-js">
@@ -44,7 +44,7 @@
                 </p>
             </video>
 
-            <script src="http://vjs.zencdn.net/5.17.0/video.js"></script>
+            <script src="https://vjs.zencdn.net/7.5.5/video.js"></script>
         </div>
     </div>
 
@@ -56,10 +56,10 @@
                 {% if video.audio_only %}
                 No Video
                 {% else %}
-                <a href="/static/{{video.filename}}">Video</a>
+                <a href="/downloads/{{video.filename}}">Video</a>
                 {% endif %}
                 {% if video.extract_audio %}
-                | <a href="/static/{{video.audiofile}}">Audio</a>
+                | <a href="/downloads/{{video.audiofile}}">Audio</a>
                 {% endif %}
                 | <a href="{{video.url}}">Original Link</a>
             </p>

@@ -40,6 +40,22 @@ The use of the build-in development server is discouraged for productional use.
 
 A set of example configuration and systemd unit files can be found in the install directory.
 
+In development environments the Django development server serves all static contents. In
+production environments this is not the case. All static content needs to be collected into a single
+directory. This diretory is configured through Django settings.py with the _STATIC_ROOT_ directive:
+
+```
+STATIC_ROOT = "/usr/share/viddlws/static"
+```
+
+To gather the files into the STATIC_ROOT directory run:
+
+```
+python manage.py collectstatic
+```
+
+
+
 ## Screenshots
 
 ![Video Overview](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-video_overview.png)
