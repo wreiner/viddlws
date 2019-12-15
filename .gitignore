@@ -13,3 +13,6 @@ db.sqlite3
 
 # environment settings for django-environ
 .env
+
+# dynamic static content directory
+static
