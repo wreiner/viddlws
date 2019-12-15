@@ -1,6 +1,7 @@
-django
-django-braces
-django-taggit
-django-environ
+django==1.11.24
+django-braces==1.11.0
+django-taggit==0.22.0
+django-environ==0.4.2
 youtube-dl
-whitenoise
+whitenoise==3.3.0
+mysqlclient==1.4.4
