@@ -54,7 +54,7 @@ class TagListView(LoginRequiredMixin, ListView):
     login_url = "/login/"
 
     def get_queryset(self):
-        queryset = Tag.objects.filter(video__user=self.request.user).exclude(name__in=["xxx", "private"]).order_by('name')
+        queryset = Tag.objects.filter(video__user=self.request.user).exclude(name__in=["xxx", "private"]).distinct().order_by('name')
         return queryset
 
 class VideoListView(LoginRequiredMixin, ListView):
