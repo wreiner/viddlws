@@ -1,7 +1,7 @@
 {% comment "GPLv3 license note" %}
 #
 #   VIDDLWS
-#   Django project which uses youtube-dl to download and serve videos.                                                                                                                                                                        
+#   Django project which uses youtube-dl to download and serve videos.
 #   Copyright (C) 2017 Walter Reiner <walter.reiner@wreiner.at>
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
-#                                                                                                                                                                                                                                             
+#
 {% endcomment %}
 
 <!DOCTYPE html>
@@ -44,10 +44,11 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+    <link href="https://vjs.zencdn.net/7.5.5/video-js.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="{% static "css/jquery-ui-1.12.1.min.css" %}">
     <link rel="stylesheet" href="{% static "css/local.css" %}">
 
-     <link href="https://vjs.zencdn.net/7.5.5/video-js.css" rel="stylesheet" />
 </head>
 
 <body class="mainbody">
@@ -57,7 +58,7 @@
 		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>                        
+			<span class="icon-bar"></span>
 		  </button>
 		  <a class="navbar-brand" href="/">VIDDLWS</a>
 		</div>
@@ -115,7 +116,7 @@
 		</div>
 	  </div>
 	</nav>
-  
+
 	<div class="container" style="margin-top:80px;">
 		{# Source the content from the template #}
 		{% block content %}{% endblock %}

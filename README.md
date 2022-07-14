@@ -1,65 +1,76 @@
-# viddlws
-Django project which uses youtube-dl to download and serve videos.
+# ViddlWS
 
-## Installation
+Video Download Web Service
 
-### Development
+[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
+[![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-- Generate secret key in settings.py
-- Install requirements
-```
-pip3 install -r requirements.txt
-```
-- Configure database settings in settings.py
-- Migrate database
-```
-python manage.py migrate
-```
-- Load initial database setup
-```
-python manage.py loaddata core/fixtures/KeyValueSettings.json
-python manage.py loaddata core/fixtures/VideoStatus.json
-```
-- Create superuser
-```
-python manage.py createsuperuser
-```
-- Add sites DNS domain to settings.py
-- Run development server
-```
-python manage.py runserver 0.0.0.0:8001
-```
-- Change download dir setting in Django Admin interface to Core.KeyValueSetting, e.g.
-```
-video_download_dir: /usr/share/viddlws/downloads
-```
+License: GPLv3
 
-### Production
+## Settings
 
-The use of the build-in development server is discouraged for productional use.
+Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
 
-A set of example configuration and systemd unit files can be found in the install directory.
+## Basic Commands
 
-In development environments the Django development server serves all static contents. In
-production environments this is not the case. All static content needs to be collected into a single
-directory. This diretory is configured through Django settings.py with the _STATIC_ROOT_ directive:
+### Setting Up Your Users
+
+-   To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
+
+-   To create a **superuser account**, use this command:
+
+        $ python manage.py createsuperuser
+
+For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
+
+### Load fixture data
+
+To prefill the VideoStatus and KeyValueSettings tables run:
 
 ```
-STATIC_ROOT = "/usr/share/viddlws/static"
+docker-compose -f local.yml run --rm django python manage.py loaddata --app core VideoStatus.json
+docker-compose -f local.yml run --rm django python manage.py loaddata --app core KeyValueSettings.json
 ```
 
-To gather the files into the STATIC_ROOT directory run:
+### Type checks
 
+Running type checks with mypy:
+
+    $ mypy viddlws
+
+### Test coverage
+
+To run the tests, check your test coverage, and generate an HTML coverage report:
+
+    $ coverage run -m pytest
+    $ coverage html
+    $ open htmlcov/index.html
+
+#### Running tests with pytest
+
+    $ pytest
+
+### Live reloading and Sass CSS compilation
+
+Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html#sass-compilation-live-reloading).
+
+### Celery
+
+This app comes with Celery.
+
+To run a celery worker:
+
+``` bash
+cd viddlws
+celery -A config.celery_app worker -l info
 ```
-python manage.py collectstatic
-```
 
+Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
 
+## Deployment
 
-## Screenshots
+The following details how to deploy this application.
 
-![Video Overview](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-video_overview.png)
+### Docker
 
-![Adding Video](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-add-video.png)
-
-![Video Details](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-video-detail.png)
+See detailed [cookiecutter-django Docker documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html).
