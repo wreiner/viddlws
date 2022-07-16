@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
+from viddlws.core.feeds import DreamrealCommentsFeed
 from viddlws.core.views import TagListView, VideoCreate, VideoDetail, VideoListView
 
 urlpatterns = [
@@ -45,6 +46,8 @@ urlpatterns = [
         r"^tags/(?P<slug>[-\w]+)/$",
         VideoListView.as_view(),
     ),
+    url(r"^latest/comments/", DreamrealCommentsFeed()),
+    url(r"^video/(?P<object_pk>[\w-]+)/", VideoListView.as_view(), name="video"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
