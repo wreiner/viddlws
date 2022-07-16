@@ -37,6 +37,13 @@ def ydl_hooks(d):
         video.status = VideoStatus.objects.get(status="downloaded")
         # video.thumbnail_extension = pathlib.Path(d["info_dict"]["thumbnail"].suffix)
         video.filename = pathlib.Path(d["filename"]).name
+
+        # we don't want this information stored
+        d["info_dict"]["automatic_captions"] = ""
+        d["info_dict"]["formats"] = ""
+        d["info_dict"]["thumbnails"] = ""
+        video.original_data = d["info_dict"]
+
         video.save()
 
         logger.info(f"video uuid {uuid} data updated, all finished ..")
