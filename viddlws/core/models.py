@@ -20,6 +20,7 @@
 import os
 import uuid
 
+from django.contrib.postgres.fields import JSONField
 from django.db import IntegrityError, models
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -58,6 +59,7 @@ class Video(models.Model):
     # https://docs.djangoproject.com/en/4.0/ref/models/fields/#uuidfield
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    modification_date = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=140)
     titleslug = models.SlugField(unique=True, max_length=140, blank=True)
     url = models.CharField(max_length=255)
@@ -65,6 +67,7 @@ class Video(models.Model):
     audio_only = models.BooleanField(default=False)
     extract_audio = models.BooleanField(default=False)
     status = models.ForeignKey(VideoStatus, on_delete=models.CASCADE)
+    original_data = JSONField(default=dict, blank=True)
     tags = TaggableManager(through=UUIDTaggedItem)
 
     # FIXME create own save with slugify
