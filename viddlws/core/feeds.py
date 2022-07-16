@@ -9,17 +9,33 @@ from viddlws.core.functions import get_setting_or_default
 from .models import Video
 
 
-class DreamrealCommentsFeed(Feed):
-    title = "Dreamreal's comments"
-    link = "/drcomments/"
-    description = "Updates on new comments on Dreamreal entry."
-
+class MediaFeed(Feed):
     def _get_filesize_in_bytes(self, filepath):
         file_stats = os.stat(filepath)
         return file_stats.st_size
 
-    def items(self):
-        return Video.objects.all().order_by("-modification_date")[:5]
+    def get_object(self, request, slug):
+        return {"slug": slug, "fullpath": request.get_full_path()}
+
+    def title(self, obj):
+        return "Tag '{}' - VIDDLWS feed".format(obj.get("slug"))
+
+    def link(self, obj):
+        return obj.get("fullpath")
+
+    def description(self, obj):
+        return "VIDDLWS feed of all entries for tag {}".format(obj.get("slug"))
+
+    def items(self, obj):
+        user = 1
+
+        return (
+            Video.objects.filter(
+                user=user, status__status="downloaded", tags__slug=obj.get("slug")
+            )
+            .exclude(tags__name__in=["xxx", "private"])
+            .order_by("-modification_date")
+        )
 
     def item_title(self, item):
         return item.title
@@ -32,6 +48,7 @@ class DreamrealCommentsFeed(Feed):
         return reverse("video", kwargs={"object_pk": item.pk})
 
     def item_enclosures(self, item):
+        # FIXME add host part, always replace extension with mp3?
         enc_url = item.filename
 
         filepath = "{}/{}".format(
