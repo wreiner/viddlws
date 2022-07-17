@@ -30,3 +30,4 @@ drf-spectacular==0.22.1  # https://github.com/tfranzel/drf-spectacular
 django-taggit==3.0.0
 django-braces==1.15.0
 yt-dlp==2022.6.29
+django-sesame==3.0
