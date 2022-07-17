@@ -1,10 +1,12 @@
 import os
 
+import sesame.utils
 from django.contrib.syndication.views import Feed
 from django.urls import reverse
 from django.utils import feedgenerator
 
 from viddlws.core.functions import get_setting_or_default
+from viddlws.users.models import User
 
 from .models import Video
 
@@ -15,7 +17,8 @@ class MediaFeed(Feed):
         return file_stats.st_size
 
     def get_object(self, request, slug):
-        return {"slug": slug, "fullpath": request.get_full_path()}
+        user = sesame.utils.get_user(request)
+        return {"slug": slug, "fullpath": request.get_full_path(), "user": user}
 
     def title(self, obj):
         return "Tag '{}' - VIDDLWS feed".format(obj.get("slug"))
@@ -27,7 +30,9 @@ class MediaFeed(Feed):
         return "VIDDLWS feed of all entries for tag {}".format(obj.get("slug"))
 
     def items(self, obj):
-        user = 1
+        user = User.objects.get(username=obj.get("user"))
+        if not user:
+            return None
 
         return (
             Video.objects.filter(
@@ -41,7 +46,6 @@ class MediaFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        # return dict(item.original_data).get("description")
         return item.original_data.get("description")
 
     def item_link(self, item):

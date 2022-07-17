@@ -1,6 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
+import datetime
 from pathlib import Path
 
 import environ
@@ -96,6 +97,7 @@ MIGRATION_MODULES = {"sites": "viddlws.contrib.sites.migrations"}
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
+    "sesame.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
@@ -327,3 +329,8 @@ SPECTACULAR_SETTINGS = {
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+# django-sesame
+# -------------------------------------------------------------------------------
+SESAME_MAX_AGE = datetime.timedelta(days=400)
+SESAME_INVALIDATE_ON_PASSWORD_CHANGE = True
