@@ -17,17 +17,33 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
+import logging
 import os
 import uuid
 
-from django.contrib.postgres.fields import JSONField
-from django.db import IntegrityError, models
+from django.db import models, transaction
+from django.db.models.signals import post_init, pre_delete
+from django.dispatch import receiver
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 
 from viddlws.users.models import User
+
+logger = logging.getLogger(__name__)
+
+
+class KeyValueSetting(models.Model):
+    """
+    Key-Value settings model
+    """
+
+    key = models.CharField(max_length=50, unique=True)
+    value = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.key}: {self.value}"
 
 
 class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
@@ -67,24 +83,41 @@ class Video(models.Model):
     audio_only = models.BooleanField(default=False)
     extract_audio = models.BooleanField(default=False)
     status = models.ForeignKey(VideoStatus, on_delete=models.CASCADE)
-    original_data = JSONField(default=dict, blank=True)
+    original_data = models.JSONField(default=dict, blank=True)
     tags = TaggableManager(through=UUIDTaggedItem)
 
-    # FIXME create own save with slugify
-    # http://stackoverflow.com/questions/837828/how-do-i-create-a-slug-in-django
-
     def save(self, *args, **kwargs):
+        # https://stackoverflow.com/a/53901543
+        from .tasks import download_video
+
+        # http://stackoverflow.com/questions/837828/how-do-i-create-a-slug-in-django
         self.titleslug = slugify(self.title)
-        while True:
-            try:
-                return super().save(*args, **kwargs)
-            except IntegrityError:
-                # generate a new slug
-                pass
+        super().save(*args, **kwargs)
+
+        if self.status == VideoStatus.objects.get(status="new"):
+            transaction.on_commit(lambda: download_video.delay(self.id))
+
+    def set_download_directory_path(self):
+        from viddlws.core.functions import get_setting_or_default
+
+        self.download_directory_path = get_setting_or_default(
+            "video_download_dir", "/tmp"
+        )
 
     def thumbnailfile(self):
-        name, extension = os.path.splitext(self.filename)
-        return "%s.jpg" % (name)
+        if self.status == VideoStatus.objects.get(status="downloaded"):
+            name, extension = os.path.splitext(self.filename)
+            if os.path.exists(f"{self.download_directory_path}/{name}.jpg"):
+                return f"{name}.jpg"
+            elif os.path.exists(f"{self.download_directory_path}/{name}.png"):
+                return f"{name}.png"
+            elif os.path.exists(f"{self.download_directory_path}/{name}.webp"):
+                return f"{name}.webp"
+        elif self.status == VideoStatus.objects.get(status="new"):
+            return "inprogress.jpg"
+        elif self.status == VideoStatus.objects.get(status="inprogress"):
+            return "inprogress.jpg"
+        return "placeholder-thumbnail.jpg"
 
     def audiofile(self):
         name, extension = os.path.splitext(self.filename)
@@ -92,6 +125,8 @@ class Video(models.Model):
 
     def audiotype(self):
         name, extension = os.path.splitext(self.audiofile())
+        if extension == "mp3":
+            extension = "mpeg"
         return "audio/%s" % (extension[1:])
 
     def videotype(self):
@@ -102,17 +137,28 @@ class Video(models.Model):
         # return ', '.join([_.name for _ in self.tags.all()])
         return self.tags.all()
 
+    def delete_associated_files(self):
+        logger.info(f"will delete files for Video {self.id} ..")
+        import glob
+        import os
+
+        for filename in glob.glob(f"{self.download_directory_path}/{self.id}*"):
+            logger.info(f"will remove file {filename} ..")
+            try:
+                os.remove(filename)
+            except Exception as e:
+                logger.error(f"error deleting file {filename}: {e}")
+                return
+
     def __str__(self):
         return f"T: {self.title} | S: {self.status}[{self.url}]"
 
 
-class KeyValueSetting(models.Model):
-    """
-    Key-Value settings model
-    """
+@receiver(pre_delete, sender=Video)
+def delete_video_hook(sender, instance, using, **kwargs):
+    instance.delete_associated_files()
 
-    key = models.CharField(max_length=50, unique=True)
-    value = models.CharField(max_length=50)
 
-    def __str__(self):
-        return f"{self.key}: {self.value}"
+@receiver(post_init, sender=Video)
+def post_init_video_hook(sender, instance, **kwargs):
+    instance.set_download_directory_path()
