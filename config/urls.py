@@ -13,26 +13,11 @@ from viddlws.core.feeds import MediaFeed
 from viddlws.core.views import TagListView, VideoCreate, VideoDetail, VideoListView
 
 urlpatterns = [
-    # path("", VideoListView.as_view(),),
-    # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
-    ),
-    # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
-    # User management
-    path("users/", include("viddlws.users.urls", namespace="users")),
-    path("accounts/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
-    # path("core/", include("viddlws.core.urls", namespace="core")),
-    # core
+    url(r"^$", VideoListView.as_view(), name="home"),
     url(
-        r"^$",
-        VideoListView.as_view(),
-    ),
-    url(
-        r"^v/(?P<pk>[\d]+)/$",
+        r"^v/(?P<pk>[\w-]+)/$",
         VideoDetail.as_view(),
+        name="v",
     ),
     url(
         r"^add_video/$",
@@ -47,7 +32,18 @@ urlpatterns = [
         VideoListView.as_view(),
     ),
     url(r"^feed/(?P<slug>[-\w]+)/", MediaFeed()),
-    url(r"^video/(?P<object_pk>[\w-]+)/", VideoListView.as_view(), name="video"),
+    # path('', VideoListView.as_view(), name= 'home'),
+    # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path(
+        "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
+    ),
+    # Django Admin, use {% url 'admin:index' %}
+    path(settings.ADMIN_URL, admin.site.urls),
+    # User management
+    path("users/", include("viddlws.users.urls", namespace="users")),
+    path("accounts/", include("allauth.urls")),
+    path("", include("viddlws.core.urls")),
+    # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development

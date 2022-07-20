@@ -49,7 +49,7 @@ class MediaFeed(Feed):
         return item.original_data.get("description")
 
     def item_link(self, item):
-        return reverse("video", kwargs={"object_pk": item.pk})
+        return reverse("v", kwargs={"pk": item.pk})
 
     def item_enclosures(self, item):
         # FIXME add host part, always replace extension with mp3?
