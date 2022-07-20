@@ -74,3 +74,22 @@ The following details how to deploy this application.
 ### Docker
 
 See detailed [cookiecutter-django Docker documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html).
+
+### Serve static files with nginx
+
+An example nginx config block could look like this:
+
+```
+    server {
+        server_name  devviddlws.example.com;
+
+        location / {
+            proxy_pass   http://127.0.0.1:8000;
+        }
+
+        location /downloads/ {
+            autoindex on;
+            alias /viddlws/downloads/;
+        }
+    }
+```
