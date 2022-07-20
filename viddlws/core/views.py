@@ -60,32 +60,38 @@ class VideoListView(LoginRequiredMixin, ListView):
     template_name = "index.html"
 
     context_object_name = "videos"
-    login_url = "/login/"
+    login_url = "/users/login/"
 
     def get_queryset(self):
         try:
             tagslug = self.kwargs["slug"]
         except Exception:
             queryset = (
-                Video.objects.filter(
-                    user=self.request.user, status__status="downloaded"
-                )
+                Video.objects.filter(user=self.request.user)
                 .exclude(tags__name__in=["xxx", "private"])
                 .order_by("title")
             )
         else:
             queryset = Video.objects.filter(
-                user=self.request.user, status__status="downloaded", tags__slug=tagslug
+                user=self.request.user, tags__slug=tagslug
             ).order_by("title")
-        logger.warn(queryset)
+
         return queryset
+
+    # https://stackoverflow.com/a/28533796
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        if "slug" in self.kwargs:
+            context["tagslug"] = self.kwargs["slug"]
+        return context
 
 
 class VideoDetail(LoginRequiredMixin, DetailView):
     model = Video
     template_name = "video_detail.html"
     context_object_name = "video"
-    login_url = "/login/"
+    login_url = "/users/login/"
 
     # def get_context_data(self, **kwargs):
     # Call the base implementation first to get a context
@@ -102,7 +108,7 @@ class VideoCreate(LoginRequiredMixin, CreateView):
     success_url = "/"
     template_name = "video_form.html"
 
-    login_url = "/login/"
+    login_url = "/users/login/"
 
     def post(self, request, *args, **kwargs):
         if "cancel" in request.POST:
@@ -134,7 +140,7 @@ class VideoUpdate(LoginRequiredMixin, UpdateView):
     success_url = "/"
     template_name = "video_form.html"
 
-    login_url = "/login/"
+    login_url = "/users/login/"
 
     def get_queryset(self):
         base_qs = super().get_queryset()
@@ -151,7 +157,7 @@ class VideoDelete(LoginRequiredMixin, DeleteView):
     model = Video
     success_url = "/"
 
-    login_url = "/login/"
+    login_url = "/users/login/"
 
     def get_object(self, queryset=None):
         """Hook to ensure object is owned by request.user."""
