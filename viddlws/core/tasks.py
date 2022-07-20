@@ -116,4 +116,10 @@ def download_video(video_id):
 
         # https://github.com/rg3/youtube-dl/issues/5602#issuecomment-121125432
         video.filename = os.path.basename(ydl.prepare_filename(info_dict))
+
+        print("will change status")
+        video.status = VideoStatus.objects.get(status="inprogress")
+        video.save()
+        print("changed status")
+
         ydl.download([video.url])
