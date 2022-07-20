@@ -1,0 +1,37 @@
+/* These styles are generated from project.scss. */
+
+body {
+  font-size: 12px;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.truncate {
+  width: 18vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-title {
+  font-weight: bold;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 20px;
+}
