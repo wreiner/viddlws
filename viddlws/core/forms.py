@@ -36,4 +36,5 @@ class VideoEditForm(ModelForm):
             "status",
             "filename",
             "titleslug",
+            "original_data",
         )
