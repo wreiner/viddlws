@@ -19,5 +19,12 @@
         "fields": {
             "status": "done"
         }
+    },
+    {
+        "model": "core.videostatus",
+        "pk": 4,
+        "fields": {
+            "status": "inprogress"
+        }
     }
 ]
