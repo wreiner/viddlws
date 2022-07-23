@@ -26,15 +26,15 @@
 
     <!-- Page Content -->
     <div class="container">
-
         <!-- Page Header -->
-        <div class="row">
+        <div class="row mt-5 mb-1">
             <div class="col-lg-12">
-                <h1 class="page-header">Your Tags
-                </h1>
+                <h1 class="page-header">Your Tags</h1>
             </div>
         </div>
         <!-- /.row -->
+
+        <hr>
 
         <!-- Projects Row -->
         <div class="row">
@@ -42,7 +42,7 @@
 		{% if tags %}
 			<p>
 			{% for tag in tags %}
-			<a href="/tags/{{tag.slug}}" class="label label-info">{{tag}}</a>
+			<a href="/tags/{{tag.slug}}"><span class="badge rounded-pill text-bg-info">{{tag}}</span></a>
 			{% endfor %}
 			</p>
 		{% else %}
