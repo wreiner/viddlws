@@ -10,7 +10,13 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
 from viddlws.core.feeds import MediaFeed
-from viddlws.core.views import TagListView, VideoCreate, VideoDetail, VideoListView
+from viddlws.core.views import (
+    TagListView,
+    VideoCreate,
+    VideoDetail,
+    VideoListView,
+    create_sesame_token,
+)
 
 urlpatterns = [
     url(r"^$", VideoListView.as_view(), name="home"),
@@ -32,6 +38,7 @@ urlpatterns = [
         VideoListView.as_view(),
     ),
     url(r"^feed/(?P<slug>[-\w]+)/", MediaFeed()),
+    url(r"^create_sesame_token/(?P<slug>[-\w]+)/", create_sesame_token),
     # path('', VideoListView.as_view(), name= 'home'),
     # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(

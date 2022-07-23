@@ -24,9 +24,12 @@ import logging
 
 from braces.views import LoginRequiredMixin
 # Django specific imports
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from sesame.utils import get_token
 from taggit.models import Tag
 
 # App specific imports
@@ -172,3 +175,15 @@ class VideoDelete(LoginRequiredMixin, DeleteView):
             return HttpResponseRedirect(self.success_url)
         else:
             return super().post(request, *args, **kwargs)
+
+
+@login_required
+def create_sesame_token(request, slug):
+    print("in create_sesame_token")
+    print(request.user)
+    sesame_token = "?sesame={}".format(get_token(request.user))
+    context = {
+        "tagslug": slug,
+        "sesame_token": sesame_token,
+    }
+    return render(request, "sesame-modal-body.html", context)
