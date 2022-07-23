@@ -8,6 +8,7 @@ from selenium import webdriver
 class ReturningUser(unittest.TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
+        self.url = os.environ.get("PYTEST_URL")
         self.username = os.environ.get("PYTEST_USERNAME")
         self.password = os.environ.get("PYTEST_PASSWORD")
 
@@ -17,7 +18,7 @@ class ReturningUser(unittest.TestCase):
     def test_can_login_with_registered_username(self):
         # User has heard about a cool new online service to archive videos and tag them.
         # User decides to visit its homepage.
-        self.browser.get("http://devviddlws.wreiner.at")
+        self.browser.get(self.url)
 
         # User checks the browser window for the correct title.
         self.assertIn("ViddlWS", self.browser.title)
