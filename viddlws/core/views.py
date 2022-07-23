@@ -19,11 +19,9 @@
 
 # https://docs.djangoproject.com/en/1.10/topics/class-based-views/generic-display/
 
-# global Python imports
 import logging
 
 from braces.views import LoginRequiredMixin
-# Django specific imports
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
@@ -32,7 +30,6 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from sesame.utils import get_token
 from taggit.models import Tag
 
-# App specific imports
 from viddlws.core.forms import VideoEditForm
 from viddlws.core.models import Video, VideoStatus
 
@@ -63,7 +60,7 @@ class VideoListView(LoginRequiredMixin, ListView):
     template_name = "index.html"
 
     context_object_name = "videos"
-    login_url = "/users/login/"
+    login_url = "/accounts/login/"
 
     def get_queryset(self):
         try:
@@ -94,7 +91,7 @@ class VideoDetail(LoginRequiredMixin, DetailView):
     model = Video
     template_name = "video_detail.html"
     context_object_name = "video"
-    login_url = "/users/login/"
+    login_url = "/accounts/login/"
 
     # def get_context_data(self, **kwargs):
     # Call the base implementation first to get a context
@@ -108,10 +105,9 @@ class VideoCreate(LoginRequiredMixin, CreateView):
     model = Video
     # http://stackoverflow.com/q/39020226/7523861
     form_class = VideoEditForm
-    success_url = "/"
     template_name = "video_form.html"
 
-    login_url = "/users/login/"
+    login_url = "/accounts/login/"
 
     def post(self, request, *args, **kwargs):
         if "cancel" in request.POST:
@@ -140,10 +136,9 @@ class VideoUpdate(LoginRequiredMixin, UpdateView):
     model = Video
     # http://stackoverflow.com/q/39020226/7523861
     form_class = VideoEditForm
-    success_url = "/"
     template_name = "video_form.html"
 
-    login_url = "/users/login/"
+    login_url = "/accounts/login/"
 
     def get_queryset(self):
         base_qs = super().get_queryset()
@@ -158,9 +153,7 @@ class VideoUpdate(LoginRequiredMixin, UpdateView):
 
 class VideoDelete(LoginRequiredMixin, DeleteView):
     model = Video
-    success_url = "/"
-
-    login_url = "/users/login/"
+    login_url = "/accounts/login/"
 
     def get_object(self, queryset=None):
         """Hook to ensure object is owned by request.user."""
@@ -179,9 +172,7 @@ class VideoDelete(LoginRequiredMixin, DeleteView):
 
 @login_required
 def create_sesame_token(request, slug):
-    print("in create_sesame_token")
-    print(request.user)
-    sesame_token = "?sesame={}".format(get_token(request.user))
+    sesame_token = f"?sesame={get_token(request.user)}"
     context = {
         "tagslug": slug,
         "sesame_token": sesame_token,
