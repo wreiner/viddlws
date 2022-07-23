@@ -107,6 +107,7 @@ class VideoCreate(LoginRequiredMixin, CreateView):
     form_class = VideoEditForm
     template_name = "video_form.html"
 
+    success_url = "/"
     login_url = "/accounts/login/"
 
     def post(self, request, *args, **kwargs):
@@ -138,6 +139,7 @@ class VideoUpdate(LoginRequiredMixin, UpdateView):
     form_class = VideoEditForm
     template_name = "video_form.html"
 
+    success_url = "/"
     login_url = "/accounts/login/"
 
     def get_queryset(self):
@@ -153,6 +155,8 @@ class VideoUpdate(LoginRequiredMixin, UpdateView):
 
 class VideoDelete(LoginRequiredMixin, DeleteView):
     model = Video
+
+    success_url = "/"
     login_url = "/accounts/login/"
 
     def get_object(self, queryset=None):
