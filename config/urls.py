@@ -39,8 +39,6 @@ urlpatterns = [
     ),
     url(r"^feed/(?P<slug>[-\w]+)/", MediaFeed()),
     url(r"^create_sesame_token/(?P<slug>[-\w]+)/", create_sesame_token),
-    # path('', VideoListView.as_view(), name= 'home'),
-    # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
@@ -49,7 +47,6 @@ urlpatterns = [
     # User management
     path("users/", include("viddlws.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    path("", include("viddlws.core.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
