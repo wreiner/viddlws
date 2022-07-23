@@ -13,6 +13,7 @@ from viddlws.core.feeds import MediaFeed
 from viddlws.core.views import (
     TagListView,
     VideoCreate,
+    VideoDelete,
     VideoDetail,
     VideoListView,
     create_sesame_token,
@@ -23,6 +24,11 @@ urlpatterns = [
     url(
         r"^v/(?P<pk>[\w-]+)/$",
         VideoDetail.as_view(),
+        name="v",
+    ),
+    url(
+        r"^d/(?P<pk>[\w-]+)/$",
+        VideoDelete.as_view(),
         name="v",
     ),
     url(

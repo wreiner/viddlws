@@ -155,6 +155,7 @@ class VideoUpdate(LoginRequiredMixin, UpdateView):
 
 class VideoDelete(LoginRequiredMixin, DeleteView):
     model = Video
+    template_name = "video_confirm_delete.html"
 
     success_url = "/"
     login_url = "/accounts/login/"
