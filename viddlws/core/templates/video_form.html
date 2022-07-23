@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load crispy_forms_tags %}
+
 {% comment "GPLv3 license note" %}
 #
 #   VIDDLWS
@@ -25,16 +27,18 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
+    <div class="row mt-5 mb-1">
         <div class="col-lg-12">
-            <h2>Add Video for download</h2>
+            <h1>Add a video to be downloaded</h1>
         </div>
     </div>
+
+    <hr>
 
     <div class="col-lg-12">
         <form method="POST" action=".">
             {% csrf_token %}
-            {{form.as_p}}
+            {% crispy form %}
 
             <div class="col-sm-12">
                     <button type="submit" class="btn btn-primary">Submit</button>
