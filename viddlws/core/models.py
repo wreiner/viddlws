@@ -125,8 +125,8 @@ class Video(models.Model):
 
     def audiotype(self):
         name, extension = os.path.splitext(self.audiofile())
-        if extension == "mp3":
-            extension = "mpeg"
+        if extension == ".mp3":
+            extension = ".mpeg"
         return "audio/%s" % (extension[1:])
 
     def videotype(self):
