@@ -16,6 +16,7 @@ from viddlws.core.views import (
     VideoDelete,
     VideoDetail,
     VideoListView,
+    VideoUpdate,
     create_sesame_token,
 )
 
@@ -24,6 +25,11 @@ urlpatterns = [
     url(
         r"^v/(?P<pk>[\w-]+)/$",
         VideoDetail.as_view(),
+        name="v",
+    ),
+    url(
+        r"^e/(?P<pk>[\w-]+)/$",
+        VideoUpdate.as_view(),
         name="v",
     ),
     url(

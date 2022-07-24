@@ -30,7 +30,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from sesame.utils import get_token
 from taggit.models import Tag
 
-from viddlws.core.forms import VideoEditForm
+from viddlws.core.forms import VideoAddForm, VideoEditForm
 from viddlws.core.models import Video, VideoStatus
 
 # Get an instance of the logger
@@ -104,7 +104,7 @@ class VideoDetail(LoginRequiredMixin, DetailView):
 class VideoCreate(LoginRequiredMixin, CreateView):
     model = Video
     # http://stackoverflow.com/q/39020226/7523861
-    form_class = VideoEditForm
+    form_class = VideoAddForm
     template_name = "video_form.html"
 
     success_url = "/"

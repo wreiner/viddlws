@@ -22,6 +22,24 @@ from django.forms import ModelForm
 from .models import Video
 
 
+class VideoAddForm(ModelForm):
+    class Meta:
+        model = Video
+
+        # http://stackoverflow.com/a/28306347
+        #   set fields list or __all__
+        # or exclude fields with a tuple
+        # http://stackoverflow.com/a/8139277
+        #   exclude = ('created_by',)
+        exclude = (
+            "user",
+            "status",
+            "filename",
+            "titleslug",
+            "original_data",
+        )
+
+
 class VideoEditForm(ModelForm):
     class Meta:
         model = Video
@@ -37,4 +55,6 @@ class VideoEditForm(ModelForm):
             "filename",
             "titleslug",
             "original_data",
+            "audio_only",
+            "extract_audio",
         )
