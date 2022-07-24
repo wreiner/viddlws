@@ -6,7 +6,7 @@
 * [X] show all videos even if they are not finished
 * [X] add abiltiy to delete videos
 * [X] show original title and description in detail view
-* use html video tag instead of video.js?
-* create view to display subscription link
+* [X] create view to display subscription link
 * [X] add speed control to player
 * [X] make video div smaller, CSS not working
+* [] use html video tag instead of video.js?

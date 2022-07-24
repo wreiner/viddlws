@@ -4,7 +4,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-        Your personal subscription link: <a id="sesame-link" href="/feed/{{ tagslug }}/{{ sesame_token }}&audio_only=true">/feed/{{ tagslug }}/{{ sesame_token }}&audio_only=true</a>
+        Your personal subscription link: <a id="sesame-link" href="/feed/{{ tagslug }}/{{ sesame_token }}&audio_only=true">{{ url_host }}/feed/{{ tagslug }}/{{ sesame_token }}&audio_only=true</a>
         <br/><br/>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onchange="audioOnlyField(this)" checked>
@@ -24,11 +24,11 @@
             var sesame_token = "{{ sesame_token }}";
             var link = "{{ sesame_token }}";
             var tagslug = "{{ tagslug }}";
+            var url_host = "{{ url_host }}"
 
+            link = url_host + "/feed/" + tagslug + "/" + sesame_token;
             if (obj.checked == true) {
-                link = "/feed/" + tagslug + "/" + sesame_token + "&audio_only=true";
-            } else {
-                link = "/feed/" + tagslug + "/" + sesame_token;
+                link = link + "&audio_only=true";
             }
 
             document.getElementById('sesame-link').innerHTML = link;
