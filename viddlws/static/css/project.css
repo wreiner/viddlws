@@ -35,3 +35,26 @@ h1 {
   font-weight: bold;
   font-size: 20px;
 }
+
+audio {
+  width: 100%;
+  display: block;
+}
+
+.audio-poster {
+  width: 640px;
+}
+
+.audio-container {
+  width: 640px;
+}
+
+.audio-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* FIXME this is not working */
+/* .video-container {
+  width: 80%;
+} */

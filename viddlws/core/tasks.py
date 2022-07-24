@@ -63,11 +63,11 @@ def download_video(video_id):
     #     return
 
     video_download_dir = get_setting_or_default("video_download_dir", "/tmp")
-    logger.info("got video_download_dir: %s" % (video_download_dir))
+    logger.debug("got video_download_dir: %s" % (video_download_dir))
 
     # https://github.com/rg3/youtube-dl/issues/5192#issuecomment-78843396
     # https://github.com/rg3/youtube-dl/blob/master/youtube_dl/YoutubeDL.py#L129-L279
-    outtmpl = f"{video_download_dir}/{video.id}-{video.titleslug}-%(id)s.%(ext)s"
+    outtmpl = f"{video_download_dir}/{video.id}.%(ext)s"
 
     ydl_opts = {
         "progress_hooks": [ydl_hooks],
@@ -78,6 +78,9 @@ def download_video(video_id):
     }
 
     if not video.audio_only:
+        logger.debug("selected keep video")
+
+        # setting preferred format
         video_opt_dics = {
             "format": "bestvideo[ext=webm]+bestaudio[ext=mp3]/best",
             # 'format': 'bestvideo[ext=webm]+bestaudio[ext=webm]/best[ext=webm]',
@@ -87,11 +90,10 @@ def download_video(video_id):
         # http://stackoverflow.com/a/26853961/7523861
         ydl_opts = {**video_opt_dics, **ydl_opts}
 
-    if not video.audio_only:
-        logger.debug("selected keep video")
+        # keep video
         ydl_opts["keepvideo"] = True
 
-    if video.extract_audio:
+    if video.extract_audio or video.audio_only:
         logger.debug("selected extract audio")
 
         # http://stackoverflow.com/a/27481870/7523861
