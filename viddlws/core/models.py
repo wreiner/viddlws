@@ -139,26 +139,16 @@ class Video(models.Model):
         # return ', '.join([_.name for _ in self.tags.all()])
         return self.tags.all()
 
-    def delete_associated_files(self):
-        logger.info(f"will delete files for Video {self.id} ..")
-        import glob
-        import os
-
-        for filename in glob.glob(f"{self.download_directory_path}/{self.id}*"):
-            logger.info(f"will remove file {filename} ..")
-            try:
-                os.remove(filename)
-            except Exception as e:
-                logger.error(f"error deleting file {filename}: {e}")
-                return
-
     def __str__(self):
         return f"T: {self.title} | S: {self.status}[{self.url}]"
 
 
 @receiver(pre_delete, sender=Video)
 def delete_video_hook(sender, instance, using, **kwargs):
-    instance.delete_associated_files()
+    # https://stackoverflow.com/a/53901543
+    from .tasks import delete_video_files
+
+    delete_video_files.delay(instance.id)
 
 
 @receiver(post_init, sender=Video)

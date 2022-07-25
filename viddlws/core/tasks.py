@@ -1,4 +1,5 @@
 # Python imports
+import glob
 import logging
 import os
 import pathlib
@@ -123,3 +124,19 @@ def download_video(video_id):
         video.save()
 
         ydl.download([video.url])
+
+
+@celery_app.task()
+def delete_video_files(video_id):
+    logger.info(f"will delete files for Video {video_id} ..")
+
+    video_download_dir = get_setting_or_default("video_download_dir", "/tmp")
+    logger.debug("got video_download_dir: %s" % (video_download_dir))
+
+    for filename in glob.glob(f"{video_download_dir}/{video_id}*"):
+        logger.info(f"will remove file {filename} ..")
+        try:
+            os.remove(filename)
+        except Exception as e:
+            logger.error(f"error deleting file {filename}: {e}")
+            return
