@@ -107,16 +107,18 @@ class Video(models.Model):
     def thumbnailfile(self):
         if self.status == VideoStatus.objects.get(status="downloaded"):
             name, extension = os.path.splitext(self.filename)
-            if os.path.exists(f"{self.download_directory_path}/{name}.jpg"):
-                return f"{name}.jpg"
-            elif os.path.exists(f"{self.download_directory_path}/{name}.png"):
-                return f"{name}.png"
-            elif os.path.exists(f"{self.download_directory_path}/{name}.webp"):
-                return f"{name}.webp"
-        elif self.status == VideoStatus.objects.get(status="new"):
+            for check_extension in ("jpg", "png", "webp"):
+                if os.path.exists(
+                    f"{self.download_directory_path}/{name}.{check_extension}"
+                ):
+                    return f"{name}.{check_extension}"
+
+        if self.status in (
+            VideoStatus.objects.get(status="new"),
+            VideoStatus.objects.get(status="inprogress"),
+        ):
             return "inprogress.jpg"
-        elif self.status == VideoStatus.objects.get(status="inprogress"):
-            return "inprogress.jpg"
+
         return "placeholder-thumbnail.jpg"
 
     def audiofile(self):
