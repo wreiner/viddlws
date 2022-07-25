@@ -30,12 +30,12 @@ urlpatterns = [
     url(
         r"^e/(?P<pk>[\w-]+)/$",
         VideoUpdate.as_view(),
-        name="v",
+        name="e",
     ),
     url(
         r"^d/(?P<pk>[\w-]+)/$",
         VideoDelete.as_view(),
-        name="v",
+        name="d",
     ),
     url(
         r"^add_video/$",
