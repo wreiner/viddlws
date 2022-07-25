@@ -85,6 +85,9 @@ class VideoListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         if "slug" in self.kwargs:
             context["tagslug"] = self.kwargs["slug"]
+
+        context["title"] = "Your Videos | ViddlWS"
+
         return context
 
 
@@ -123,7 +126,7 @@ class VideoCreate(LoginRequiredMixin, CreateView):
         # get days to today for which no ratings exist
         # http://stackoverflow.com/a/31070622/7523861
 
-        context["title"] = "VIDDLWS | Add Video"
+        context["title"] = "Add Video | ViddlWS"
         context["nav_section"] = "video"
         context["nav_sub_section"] = "add"
         return context
@@ -153,6 +156,17 @@ class VideoUpdate(LoginRequiredMixin, UpdateView):
         else:
             return super().post(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # get days to today for which no ratings exist
+        # http://stackoverflow.com/a/31070622/7523861
+
+        context["title"] = "Modify Video | ViddlWS"
+        context["nav_section"] = "video"
+        context["nav_sub_section"] = "modify"
+        return context
+
 
 class VideoDelete(LoginRequiredMixin, DeleteView):
     model = Video
@@ -174,6 +188,17 @@ class VideoDelete(LoginRequiredMixin, DeleteView):
             return HttpResponseRedirect(self.success_url)
         else:
             return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # get days to today for which no ratings exist
+        # http://stackoverflow.com/a/31070622/7523861
+
+        context["title"] = "Delete Video | ViddlWS"
+        context["nav_section"] = "video"
+        context["nav_sub_section"] = "delete"
+        return context
 
 
 @login_required
