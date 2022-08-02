@@ -51,14 +51,17 @@ services:
   celeryworker:
     <<: *django
     image: viddlws_production_celeryworker
+    entrypoint: /celery-entrypoint
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
     image: viddlws_production_celerybeat
+    entrypoint: /celery-entrypoint
     command: /start-celerybeat
 
   flower:
     <<: *django
     image: viddlws_production_flower
+    entrypoint: /celery-entrypoint
     command: /start-flower

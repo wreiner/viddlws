@@ -72,6 +72,7 @@ services:
         source: /tmp/viddlws/downloads
         target: /viddlws/downloads
     ports: []
+    entrypoint: /celery-entrypoint
     command: /start-celeryworker
 
   celerybeat:
@@ -82,6 +83,7 @@ services:
       - redis
       - viddlwspostgres
     ports: []
+    entrypoint: /celery-entrypoint
     command: /start-celerybeat
 
   flower:
@@ -90,4 +92,5 @@ services:
     container_name: viddlws_local_flower
     ports:
       - "5555:5555"
+    entrypoint: /celery-entrypoint
     command: /start-flower

@@ -42,4 +42,26 @@ until postgres_ready; do
 done
 >&2 echo 'PostgreSQL is available'
 
+# check if migrations are needed
+if python /app/manage.py showmigrations | grep '\[ \]' &> /dev/null; then
+    >&2 echo "will run migrations .."
+    python /app/manage.py migrate
+
+    # load fixtures
+    >&2 echo "will load fixtures .."
+    python /app/manage.py loaddata --app core VideoStatus.json
+    python /app/manage.py loaddata --app core KeyValueSettings.json
+fi
+
+# create adminuser and log initial password it the user does not exist yet
+# copied from AWX project
+# https://github.com/ansible/awx/blob/67f1ab2237bc1da453bdacfd848c87e7bfb1371b/tools/docker-compose/bootstrap_development.sh#L22
+if output=$(python /app/manage.py createsuperuser --noinput --username=admin --email=admin@localhost 2> /dev/null); then
+    >&2 echo "will create admin user .."
+    >&2 echo $output
+    admin_password=$(openssl rand -base64 12)
+    >&2 echo "Admin password: ${admin_password}"
+    python /app/manage.py update_password --username=admin --password=${admin_password}
+fi
+
 exec "$@"
