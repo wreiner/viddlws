@@ -18,6 +18,8 @@ services:
     env_file:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
+    volumes:
+      - /viddlws/downloads:/viddlws/downloads
     command: /start
 
   postgres:
@@ -36,6 +38,8 @@ services:
       context: .
       dockerfile: ./compose/production/nginx/Dockerfile
     image: viddlws_production_nginx
+    volumes:
+      - /viddlws/downloads:/viddlws/downloads
     depends_on:
       - django
     ports:
@@ -47,6 +51,8 @@ services:
   celeryworker:
     <<: *django
     image: viddlws_production_celeryworker
+    volumes:
+      - /viddlws/downloads:/viddlws/downloads
     entrypoint: /celery-entrypoint
     command: /start-celeryworker
 
@@ -61,3 +67,5 @@ services:
     image: viddlws_production_flower
     entrypoint: /celery-entrypoint
     command: /start-flower
+    ports:
+      - "127.0.0.1:5555:5555"
