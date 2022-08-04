@@ -10,3 +10,8 @@
 * [X] add speed control to player
 * [X] make video div smaller, CSS not working
 * [] use html video tag instead of video.js?
+* [] skip forward/backwards by double tapping on video
+* [] better looking audio player
+* [] better looking video playing page
+* [] fix pagination in list view
+* [] replace url with path/re_path due to url deprecation
