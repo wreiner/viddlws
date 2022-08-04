@@ -54,14 +54,13 @@ if python /app/manage.py showmigrations | grep '\[ \]' &> /dev/null; then
 fi
 
 # create adminuser and log initial password it the user does not exist yet
-# copied from AWX project
-# https://github.com/ansible/awx/blob/67f1ab2237bc1da453bdacfd848c87e7bfb1371b/tools/docker-compose/bootstrap_development.sh#L22
-if output=$(python /app/manage.py createsuperuser --noinput --username=admin --email=admin@localhost 2> /dev/null); then
-    >&2 echo "will create admin user .."
-    >&2 echo $output
-    admin_password=$(openssl rand -base64 12)
-    >&2 echo "Admin password: ${admin_password}"
-    python /app/manage.py update_password --username=admin --password=${admin_password}
+export DJANGO_SUPERUSER_USERNAME=admin
+export DJANGO_SUPERUSER_PASSWORD=$(openssl rand -base64 12)
+if python /app/manage.py createsuperuser --noinput --email=admin@localhost &>/dev/null; then
+    >&2 echo "New admin password: ${DJANGO_SUPERUSER_PASSWORD}"
 fi
+
+unset DJANGO_SUPERUSER_USERNAME
+unset DJANGO_SUPERUSER_PASSWORD
 
 exec "$@"

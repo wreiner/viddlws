@@ -65,6 +65,9 @@ COPY --chown=django:django ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
+COPY ./compose/production/django/celery-entrypoint /celery-entrypoint
+RUN sed -i 's/\r$//g' /celery-entrypoint
+RUN chmod +x /celery-entrypoint
 
 COPY --chown=django:django ./compose/production/django/start /start
 RUN sed -i 's/\r$//g' /start
