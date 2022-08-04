@@ -1,7 +1,6 @@
 """
 Base settings to build other settings files upon.
 """
-import datetime
 from pathlib import Path
 
 import environ
@@ -231,7 +230,7 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Walter Reiner""", "walter.reiner@wreiner.at")]
+ADMINS = [("""ViddlWS Admin""", "admin@localhost")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
@@ -332,5 +331,7 @@ SPECTACULAR_SETTINGS = {
 
 # django-sesame
 # -------------------------------------------------------------------------------
-SESAME_MAX_AGE = datetime.timedelta(days=400)
+
+# By not setting a max age value tokens will never expire.
+# SESAME_MAX_AGE = datetime.timedelta(days=400)
 SESAME_INVALIDATE_ON_PASSWORD_CHANGE = True
