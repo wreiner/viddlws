@@ -36,7 +36,12 @@ logger = logging.getLogger(__name__)
 
 class KeyValueSetting(models.Model):
     """
-    Key-Value settings model
+    Key-Value settings model.
+
+    Model is used for settings, look for a key and get the value.
+
+    To help with unset keys a function "get_setting_or_default" is available in
+    functions.py which should not be needed anymore starting with Django 4.0.
     """
 
     key = models.CharField(max_length=50, unique=True)
@@ -54,11 +59,15 @@ class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
 
 class VideoStatus(models.Model):
     """
-    Video status
+    Core Video status model.
 
+    Holds string representation of Video statuses.
+
+    Known video statuses are:
     - new
     - downloaded
     - done
+    - inprogress
     """
 
     status = models.CharField(max_length=10, unique=True)
@@ -69,7 +78,9 @@ class VideoStatus(models.Model):
 
 class Video(models.Model):
     """
-    Download(ed) Videos mangement
+    Core Video model.
+
+    Manages information about all Video objects known to the system.
     """
 
     # https://docs.djangoproject.com/en/4.0/ref/models/fields/#uuidfield
@@ -87,6 +98,13 @@ class Video(models.Model):
     tags = TaggableManager(through=UUIDTaggedItem)
 
     def save(self, *args, **kwargs):
+        """
+        Custom save method for the Video object.
+
+        It calls the download_video Celery task on transaction commit when the
+        Video status is "new".
+        """
+
         # https://stackoverflow.com/a/53901543
         from .tasks import download_video
 
@@ -98,6 +116,13 @@ class Video(models.Model):
             transaction.on_commit(lambda: download_video.delay(self.id))
 
     def set_download_directory_path(self):
+        """
+        Reads the value for "video_download_dir" from the KeyValueSetting table.
+
+        It uses the "get_setting_or_default" function which should not be needed
+        anymore starting with Django 4.0.
+        """
+
         from viddlws.core.functions import get_setting_or_default
 
         self.download_directory_path = get_setting_or_default(
@@ -105,6 +130,21 @@ class Video(models.Model):
         )
 
     def thumbnailfile(self):
+        """
+        Depending on the status of the Video object the corresponding thumbnail
+        filename will be returned.
+
+        When status is new or inprogress the inprogress thumbnail filename is
+        returned, when status is downloaded the function checks the downloads
+        directory for the thumbnail file with the extensions jpg, png and webp.
+        If such a file is found that files filename will be returned.
+
+        In all other cases a placeholder thumbnail filename will be returnd.
+
+        Returns:
+            str: Thumbnail filename for Video object.
+        """
+
         if self.status == VideoStatus.objects.get(status="downloaded"):
             name, extension = os.path.splitext(self.filename)
             for check_extension in ("jpg", "png", "webp"):
@@ -145,6 +185,11 @@ class Video(models.Model):
 
 @receiver(pre_delete, sender=Video)
 def delete_video_hook(sender, instance, using, **kwargs):
+    """
+    Hook which is handling "pre_delete" calls from Django signals.
+
+    It calls the delete_video_files Celery task when a Video object gets deleted.
+    """
     # https://stackoverflow.com/a/53901543
     from .tasks import delete_video_files
 
@@ -153,4 +198,10 @@ def delete_video_hook(sender, instance, using, **kwargs):
 
 @receiver(post_init, sender=Video)
 def post_init_video_hook(sender, instance, **kwargs):
+    """
+    Hook which is handling "post_init" calls from Django signals.
+
+    It calls the set_download_directory_path for the created Video object to
+    initialize the "download_directory_path" object property.
+    """
     instance.set_download_directory_path()

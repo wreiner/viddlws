@@ -18,6 +18,12 @@ logger = logging.getLogger(__name__)
 
 # FIXME store time only update progress in table in 10 seconds
 def ydl_hooks(d):
+    """
+    Hook function for yt_dlp.
+
+    Gets triggered whenever a status change has happened downloading the Video.
+    """
+
     if d["status"] == "finished":
         # https://stackoverflow.com/a/14166194
         uuid = re.findall(
@@ -52,6 +58,12 @@ def ydl_hooks(d):
 
 @celery_app.task()
 def download_video(video_id):
+    """
+    This function actually downloads the video from the provided source.
+
+    Based on the users choice audio data is extracted.
+    """
+
     video = Video.objects.get(id=video_id)
     if not video:
         logger.info(f"supplied video id {video_id} not found, exiting.")
@@ -128,6 +140,10 @@ def download_video(video_id):
 
 @celery_app.task()
 def delete_video_files(video_id):
+    """
+    This function deletes all files associated with the video object id.
+    """
+
     logger.info(f"will delete files for Video {video_id} ..")
 
     video_download_dir = get_setting_or_default("video_download_dir", "/tmp")

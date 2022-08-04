@@ -23,6 +23,10 @@ from .models import Video
 
 
 class VideoAddForm(ModelForm):
+    """
+    The form used to add a new Video object.
+    """
+
     class Meta:
         model = Video
 
@@ -41,6 +45,13 @@ class VideoAddForm(ModelForm):
 
 
 class VideoEditForm(ModelForm):
+    """
+    The form used to modify new Video object.
+
+    A different form than the VideoAddForm was created because changes in audio
+    formats are not possible at the modifying stage.
+    """
+
     class Meta:
         model = Video
 
