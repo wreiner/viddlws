@@ -15,3 +15,5 @@
 * [] better looking video playing page
 * [] fix pagination in list view
 * [] replace url with path/re_path due to url deprecation
+* [] fix sending confirmation email
+* [] add ability to switch between self hosted mail and [anymail](https://anymail.dev/en/stable/)

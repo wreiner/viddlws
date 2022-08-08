@@ -10,5 +10,6 @@ Welcome to ViddlWS's documentation!
    :maxdepth: 4
    :caption: Contents:
 
+   quick-start
    installation
    development
