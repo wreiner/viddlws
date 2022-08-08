@@ -56,11 +56,13 @@ fi
 # create adminuser and log initial password it the user does not exist yet
 export DJANGO_SUPERUSER_USERNAME=admin
 export DJANGO_SUPERUSER_PASSWORD=$(openssl rand -base64 12)
-if python /app/manage.py createsuperuser --noinput --email=admin@localhost &>/dev/null; then
+export DJANGO_SUPERUSER_EMAIL='admin@localhost'
+if python /app/manage.py createsuperuser --noinput &>/dev/null; then
     >&2 echo "New admin password: ${DJANGO_SUPERUSER_PASSWORD}"
 fi
 
 unset DJANGO_SUPERUSER_USERNAME
 unset DJANGO_SUPERUSER_PASSWORD
+unset DJANGO_SUPERUSER_EMAIL
 
 exec "$@"
