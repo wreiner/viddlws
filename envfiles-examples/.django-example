@@ -5,8 +5,6 @@ DJANGO_SETTINGS_MODULE=config.settings.production
 DJANGO_SECRET_KEY=<generate-key>
 DJANGO_ADMIN_URL=<generate-url>
 DJANGO_ALLOWED_HOSTS=domain.com
-# https://stackoverflow.com/a/38842030
-DJANGO_CSRF_TRUSTED_ORIGINS=domain.com
 
 # Security
 # ------------------------------------------------------------------------------

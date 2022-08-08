@@ -25,7 +25,6 @@ DJANGO_SECRET_KEY                   Used to provide cryptographic signing
                                     https://docs.djangoproject.com/en/stable/ref/settings/#secret-key
 DJANGO_ADMIN_URL                    URL path to admin interface, normally /admin
 DJANGO_ALLOWED_HOSTS                FQDN of your ViddlWS installation
-DJANGO_CSRF_TRUSTED_ORIGINS         FQDN of your ViddlWS installation
 ===========================         =====
 
 Probably the most important setting is `DJANGO_SECRET_KEY`.
