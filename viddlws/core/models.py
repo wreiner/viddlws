@@ -24,6 +24,7 @@ import uuid
 from django.db import models, transaction
 from django.db.models.signals import post_init, pre_delete
 from django.dispatch import receiver
+from django.templatetags.static import static
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from taggit.managers import TaggableManager
@@ -157,9 +158,9 @@ class Video(models.Model):
             VideoStatus.objects.get(status="new"),
             VideoStatus.objects.get(status="inprogress"),
         ):
-            return "inprogress.jpg"
+            return static("inprogress.jpg")
 
-        return "placeholder-thumbnail.jpg"
+        return static("placeholder-thumbnail.jpg")
 
     def audiofile(self):
         name, extension = os.path.splitext(self.filename)
