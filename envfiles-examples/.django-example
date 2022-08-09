@@ -13,7 +13,15 @@ DJANGO_SECURE_SSL_REDIRECT=False
 
 # Email
 # ------------------------------------------------------------------------------
-DJANGO_SERVER_EMAIL=
+DJANGO_SERVER_EMAIL="your_email@domain.com"
+EMAIL_HOST="smtp.domain.com"
+EMAIL_PORT=587
+EMAIL_HOST_USER="your_email@domain.com"
+EMAIL_HOST_PASSWORD="email_password"
+DEFAULT_FROM_EMAIL="your_email@domain.com"
+EMAIL_USE_TLS=True
+EMAIL_USE_SSL=False
+EMAIL_TIMEOUT=300
 
 
 # django-allauth
