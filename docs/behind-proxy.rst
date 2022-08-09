@@ -41,6 +41,33 @@ users installing ViddlWS need to implement a solution themselves.
 
 To configure ViddlWS refer to the common :ref:`prod-settings` documentation.
 
+=========================
+nginx as a reverse proxy
+=========================
+
+To use nginx as a reverse proxy the following config could work:
+
+.. code-block:: bash
+
+  server {
+      listen       443 default_server;
+      server_name  fqdn.domain.com;
+
+      ssl on;
+      ssl_certificate /etc/nginx/example.crt;
+      ssl_certificate_key /etc/nginx/example.key;
+
+      location / {
+          proxy_set_header X-Forwarded-Proto https;
+          proxy_set_header Host $host;
+          proxy_redirect off;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_pass   http://127.0.0.1:8000;
+      }
+  }
+
 ========================
 Access to Celery Flower
 ========================

@@ -1,103 +1,62 @@
 # ViddlWS
 
-Video Download Web Service
+ViddlWS (Video Download Web Service) is a Django project which uses [yt_dlp](https://github.com/yt-dlp/yt-dlp) to archive videos from various sites like YouTube and create podcast feeds from them.
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-License: GPLv3
+## Features
 
-## Settings
+* Download and serve videos from various sites like YouTube
+* Extract audio or store only audio data from the sources
+* Tag the downloaded items
+* Subscribe to a podcast feed of tagged items
 
-Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
+## Documentation
 
-## Basic Commands
+The documentation can be found in the docs folder.
 
-### Create database schema
-
-To create the database schema run:
-
-```
-docker-compose -f local.yml run --rm django python manage.py migrate
-```
-
-### Setting Up Your Users
-
--   To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
-
--   To create a **superuser account**, use this command:
-
-        $ python manage.py createsuperuser
-
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-### Load fixture data
-
-To prefill the VideoStatus and KeyValueSettings tables run:
+## Quick start
 
 ```
-docker-compose -f local.yml run --rm django python manage.py loaddata --app core VideoStatus.json
-docker-compose -f local.yml run --rm django python manage.py loaddata --app core KeyValueSettings.json
-```
-
-### Type checks
-
-Running type checks with mypy:
-
-    $ mypy viddlws
-
-### Test coverage
-
-To run the tests, check your test coverage, and generate an HTML coverage report:
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-#### Running tests with pytest
-
-    $ pytest
-
-### Live reloading and Sass CSS compilation
-
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html#sass-compilation-live-reloading).
-
-### Celery
-
-This app comes with Celery.
-
-To run a celery worker:
-
-``` bash
+# Clone the repository
+git clone https://github.com/wreiner/viddlws
 cd viddlws
-celery -A config.celery_app worker -l info
-```
 
-Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
+# Create the config files based on the supplied examples
+mkdir -p .envs/.production
+cp envfiles-examples/.django-example .envs/.production/.django
+cp envfiles-examples/.postgres-example .envs/.production/.postgres
 
-## Deployment
+# Set the SECRET_ID
+SECRET_ID=$(python3 -c "import secrets; print(secrets.token_urlsafe())")
+sed -i "s/<generate-key>/${SECRET_ID}/" .envs/.production/.django
 
-The following details how to deploy this application.
+# Set the admin url
+ADMIN_URL=$(echo $RANDOM | md5sum | head -c 32; echo;)
+sed -i "s/<generate-url>/${ADMIN_URL}\//" .envs/.production/.django
 
-### Docker
+# set the domain
+sed -i "s/domain.com/my.fqdn.com/" .envs/.production/.django
 
-See detailed [cookiecutter-django Docker documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html).
+# set the flower password
+FLOWER_PASSWORD=$(echo $RANDOM | md5sum | head -c 32; echo;)
+sed -i "s/<set-password>/${FLOWER_PASSWORD}/" .envs/.production/.django
 
-### Serve static files with nginx
+# set the email configuration in .envs/.production/.django
 
-An example nginx config block could look like this:
+# set the postgres password
+POSTGRES_PASSWORD=$(echo $RANDOM | md5sum | head -c 32; echo;)
+sed -i "s/<set-password>/${POSTGRES_PASSWORD}/" .envs/.production/.postgres
 
-```
-    server {
-        server_name  devviddlws.example.com;
+# make sure that the downloads directory exists
+sudo mkdir -p /viddlws/downloads
 
-        location / {
-            proxy_pass   http://127.0.0.1:8000;
-        }
+# startup ViddlWS for the first time
+docker-compose -f production-behind-proxy.yml pull
+docker-compose -f production-behind-proxy.yml up
 
-        location /downloads/ {
-            autoindex on;
-            alias /viddlws/downloads/;
-        }
-    }
+# change site domain in admin gui
+# open https://my.fqdn.com/${ADMIN_URL}/
+# navigate to Sites and change domain.com entry
 ```

@@ -6,7 +6,7 @@ Quick Start
 .. code-block:: bash
 
     # Clone the repository
-    git clone
+    git clone https://github.com/wreiner/viddlws
     cd viddlws
 
     # Create the config files based on the supplied examples
@@ -28,6 +28,8 @@ Quick Start
     # set the flower password
     FLOWER_PASSWORD=$(echo $RANDOM | md5sum | head -c 32; echo;)
     sed -i "s/<set-password>/${FLOWER_PASSWORD}/" .envs/.production/.django
+
+    # set the email configuration in .envs/.production/.django
 
     # set the postgres password
     POSTGRES_PASSWORD=$(echo $RANDOM | md5sum | head -c 32; echo;)
