@@ -1,0 +1,71 @@
+version: '3'
+
+volumes:
+  production_postgres_data: {}
+  production_postgres_data_backups: {}
+  production_traefik: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    image: viddlws_production_django
+    platform: linux/x86_64
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
+    volumes:
+      - /viddlws/downloads:/viddlws/downloads
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: viddlws_production_postgres
+    volumes:
+      - production_postgres_data:/var/lib/postgresql/data:Z
+      - production_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.production/.postgres
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile
+    image: viddlws_production_nginx
+    volumes:
+      - /viddlws/downloads:/viddlws/downloads
+    depends_on:
+      - django
+    ports:
+      - "0.0.0.0:8000:8000"
+
+  redis:
+    image: redis:6
+
+  celeryworker:
+    <<: *django
+    image: viddlws_production_celeryworker
+    volumes:
+      - /viddlws/downloads:/viddlws/downloads
+    entrypoint: /celery-entrypoint
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    image: viddlws_production_celerybeat
+    entrypoint: /celery-entrypoint
+    command: /start-celerybeat
+
+  flower:
+    <<: *django
+    image: viddlws_production_flower
+    entrypoint: /celery-entrypoint
+    command: /start-flower
+    ports:
+      - "127.0.0.1:5555:5555"

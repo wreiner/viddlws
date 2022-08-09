@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% comment "GPLv3 license note" %}
+#
+#   VIDDLWS
+#   Django project which uses youtube-dl to download and serve videos.
+#   Copyright (C) 2017 Walter Reiner <walter.reiner@wreiner.at>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software Foundation,
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+#
+{% endcomment %}
+
+
+{% block content %}
+
+<div class="container">
+    <!-- Page Header -->
+    <div class="row mt-5 mb-1">
+        <div class="col-lg-8">
+            <h1>{{ video.title }}</h1>
+        </div>
+        <div class="col-lg-4 text-end">
+            <b>
+                <a href="/e/{{ video.id }}" class="btn btn-primary"><i class="bi bi-pencil"></i> Edit {% if video.audio_only %} Audio{% else %} Video{% endif%}</a>
+            </b>
+            <b>
+                <a href="/d/{{ video.id }}" class="btn btn-danger"><i class="bi bi-trash"></i> Delete {% if video.audio_only %} Audio{% else %} Video{% endif%}</a>
+            </b>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <hr>
+
+    <div class="row mt-3">
+        <div class="col-lg-12">
+            {% if video.audio_only %}
+            <div class="audio-container">
+                <img src="/downloads/{{video.thumbnailfile}}"/><br>
+                <audio controls="">
+                    <source src="/downloads/{{video.audiofile}}" type="{{video.audiotype}}">
+                </audio>
+            </div>
+            {% else %}
+            <div class="video-container">
+                <video id="my-video" class="video-js" controls preload="auto" style="max-width: 100%;"
+                    poster="/downloads/{{video.thumbnailfile}}" data-setup="{}">
+                    <source src="/downloads/{{video.filename}}" type="{{video.videotype}}">
+
+                    <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a web browser that
+                        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                    </p>
+                </video>
+            </div>
+            <br>
+            {% endif %}
+
+            <script src="https://vjs.zencdn.net/7.20.1/video.min.js"></script>
+            <script>
+                var player = videojs('my-video', {
+                  playbackRates: [0.5, 1, 1.75, 2]
+                });
+            </script>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <p class="list-title">{{ video.original_data.title }}</p>
+            <p>{{ video.original_data.description | linebreaksbr}}</p>
+            <p>
+                Download:
+                {% if video.audio_only %}
+                No Video
+                {% else %}
+                <a href="/downloads/{{video.filename}}">Video</a>
+                {% endif %}
+                {% if video.extract_audio or video.audio_only %}
+                | <a href="/downloads/{{video.audiofile}}">Audio</a>
+                {% endif %}
+                | <a href="{{video.url}}">Original Link</a>
+            </p>
+            <p>
+                {% for tag in video.tags_display %}
+                <a href="/tags/{{tag.slug}}"><span class="badge rounded-pill text-bg-info">{{tag}}</span></a>
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

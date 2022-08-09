@@ -1,65 +1,62 @@
-# viddlws
-Django project which uses youtube-dl to download and serve videos.
+# ViddlWS
 
-## Installation
+ViddlWS (Video Download Web Service) is a Django project which uses [yt_dlp](https://github.com/yt-dlp/yt-dlp) to archive videos from various sites like YouTube and create podcast feeds from them.
 
-### Development
+[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
+[![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-- Generate secret key in settings.py
-- Install requirements
-```
-pip3 install -r requirements.txt
-```
-- Configure database settings in settings.py
-- Migrate database
-```
-python manage.py migrate
-```
-- Load initial database setup
-```
-python manage.py loaddata core/fixtures/KeyValueSettings.json
-python manage.py loaddata core/fixtures/VideoStatus.json
-```
-- Create superuser
-```
-python manage.py createsuperuser
-```
-- Add sites DNS domain to settings.py
-- Run development server
-```
-python manage.py runserver 0.0.0.0:8001
-```
-- Change download dir setting in Django Admin interface to Core.KeyValueSetting, e.g.
-```
-video_download_dir: /usr/share/viddlws/downloads
-```
+## Features
 
-### Production
+* Download and serve videos from various sites like YouTube
+* Extract audio or store only audio data from the sources
+* Tag the downloaded items
+* Subscribe to a podcast feed of tagged items
 
-The use of the build-in development server is discouraged for productional use.
+## Documentation
 
-A set of example configuration and systemd unit files can be found in the install directory.
+The documentation can be found in the docs folder.
 
-In development environments the Django development server serves all static contents. In
-production environments this is not the case. All static content needs to be collected into a single
-directory. This diretory is configured through Django settings.py with the _STATIC_ROOT_ directive:
+## Quick start
 
 ```
-STATIC_ROOT = "/usr/share/viddlws/static"
+# Clone the repository
+git clone https://github.com/wreiner/viddlws
+cd viddlws
+
+# Create the config files based on the supplied examples
+mkdir -p .envs/.production
+cp envfiles-examples/.django-example .envs/.production/.django
+cp envfiles-examples/.postgres-example .envs/.production/.postgres
+
+# Set the SECRET_ID
+SECRET_ID=$(python3 -c "import secrets; print(secrets.token_urlsafe())")
+sed -i "s/<generate-key>/${SECRET_ID}/" .envs/.production/.django
+
+# Set the admin url
+ADMIN_URL=$(echo $RANDOM | md5sum | head -c 32; echo;)
+sed -i "s/<generate-url>/${ADMIN_URL}\//" .envs/.production/.django
+
+# set the domain
+sed -i "s/domain.com/my.fqdn.com/" .envs/.production/.django
+
+# set the flower password
+FLOWER_PASSWORD=$(echo $RANDOM | md5sum | head -c 32; echo;)
+sed -i "s/<set-password>/${FLOWER_PASSWORD}/" .envs/.production/.django
+
+# set the email configuration in .envs/.production/.django
+
+# set the postgres password
+POSTGRES_PASSWORD=$(echo $RANDOM | md5sum | head -c 32; echo;)
+sed -i "s/<set-password>/${POSTGRES_PASSWORD}/" .envs/.production/.postgres
+
+# make sure that the downloads directory exists
+sudo mkdir -p /viddlws/downloads
+
+# startup ViddlWS for the first time
+docker-compose -f production-behind-proxy.yml pull
+docker-compose -f production-behind-proxy.yml up
+
+# change site domain in admin gui
+# open https://my.fqdn.com/${ADMIN_URL}/
+# navigate to Sites and change domain.com entry
 ```
-
-To gather the files into the STATIC_ROOT directory run:
-
-```
-python manage.py collectstatic
-```
-
-
-
-## Screenshots
-
-![Video Overview](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-video_overview.png)
-
-![Adding Video](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-add-video.png)
-
-![Video Details](https://github.com/wreiner/viddlws/blob/master/screenshots/viddlws-video-detail.png)

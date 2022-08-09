@@ -1,0 +1,78 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+
+
+# N.B. If only .env files supported variable expansion...
+export CELERY_BROKER_URL="${REDIS_URL}"
+
+
+if [ -z "${POSTGRES_USER}" ]; then
+    base_postgres_image_default_user='postgres'
+    export POSTGRES_USER="${base_postgres_image_default_user}"
+fi
+export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+
+# based on AWX project
+# https://github.com/ansible/awx/blob/devel/tools/ansible/roles/dockerfile/files/wait-for-migrations
+readonly MIN_SLEEP=0.5
+readonly MAX_SLEEP=30
+readonly ATTEMPTS=30
+
+# Args: last_sleep
+next_sleep() {
+    awk "BEGIN {ns = ${1} * 2; ns = ns > ${MAX_SLEEP} ? ${MAX_SLEEP} : ns; print(ns)}"
+}
+
+wait_for_migrations() {
+    local attempt=1
+    local next_sleep="${MIN_SLEEP}"
+
+    while true
+    do
+        >&2 echo "Attempt ${attempt} of ${ATTEMPTS}"
+        if ! python /app/manage.py showmigrations | grep '\[ \]' &> /dev/null; then
+            return
+        fi
+
+        (( ++attempt > ATTEMPTS )) && break
+
+        >&2 echo "Waiting ${next_sleep} seconds before next attempt .."
+        sleep "${next_sleep}"
+        next_sleep=$(next_sleep ${next_sleep})
+    done
+}
+
+postgres_ready() {
+python << END
+import sys
+
+import psycopg2
+
+try:
+    psycopg2.connect(
+        dbname="${POSTGRES_DB}",
+        user="${POSTGRES_USER}",
+        password="${POSTGRES_PASSWORD}",
+        host="${POSTGRES_HOST}",
+        port="${POSTGRES_PORT}",
+    )
+except psycopg2.OperationalError:
+    sys.exit(-1)
+sys.exit(0)
+
+END
+}
+until postgres_ready; do
+  >&2 echo 'Waiting for PostgreSQL to become available...'
+  sleep 1
+done
+>&2 echo 'PostgreSQL is available'
+
+# if we are not the django container let's wait until migrations are done
+wait_for_migrations
+
+exec "$@"

@@ -1,0 +1,38 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-rss"></i> Subscribe to tag {{ tagslug }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        Your personal subscription link: <a id="sesame-link" href="/feed/{{ tagslug }}/{{ sesame_token }}&audio_only=true">{{ url_host }}/feed/{{ tagslug }}/{{ sesame_token }}&audio_only=true</a>
+        <br/><br/>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onchange="audioOnlyField(this)" checked>
+            <label class="form-check-label" for="flexSwitchCheckChecked">Make feed audio files only</label>
+          </div>
+        <br/>
+        <div class="alert alert-warning align-items-center" role="alert">
+            <b><i class="bi bi-megaphone"></i> Important information</b>
+            <br/><br/>
+            The token provided above and all other tokens you created in the past will be valid until your next password change.
+            <br/><br/>
+            These tokens can not be invalidated without a password change.
+        </div>
+    </div>
+    <script>
+        function audioOnlyField(obj) {
+            var sesame_token = "{{ sesame_token }}";
+            var link = "{{ sesame_token }}";
+            var tagslug = "{{ tagslug }}";
+            var url_host = "{{ url_host }}"
+
+            link = url_host + "/feed/" + tagslug + "/" + sesame_token;
+            if (obj.checked == true) {
+                link = link + "&audio_only=true";
+            }
+
+            document.getElementById('sesame-link').innerHTML = link;
+            document.getElementById('sesame-link').href = link;
+        }
+    </script>
+</div>

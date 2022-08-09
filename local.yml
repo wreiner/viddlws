@@ -1,0 +1,96 @@
+version: '3'
+
+volumes:
+  viddlws_local_postgres_data: {}
+  viddlws_local_postgres_data_backups: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: viddlws_local_django
+    container_name: viddlws_local_django
+    platform: linux/x86_64
+    depends_on:
+      - viddlwspostgres
+      - redis
+    volumes:
+      - .:/app:z
+      - type: bind
+        source: /tmp/viddlws/downloads
+        target: /viddlws/downloads
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "8000:8000"
+    command: /start
+
+  viddlwspostgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: viddlws_production_postgres
+    container_name: viddlws_local_postgres
+    volumes:
+      - viddlws_local_postgres_data:/var/lib/postgresql/data:Z
+      - viddlws_local_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.local/.postgres
+
+  docs:
+    image: viddlws_local_docs
+    container_name: viddlws_local_docs
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./viddlws:/app/viddlws:z
+    ports:
+      - "9000:9000"
+    command: /start-docs
+
+  redis:
+    image: redis:6
+    container_name: viddlws_local_redis
+
+  celeryworker:
+    <<: *django
+    image: viddlws_local_celeryworker
+    container_name: viddlws_local_celeryworker
+    depends_on:
+      - redis
+      - viddlwspostgres
+    volumes:
+      - type: bind
+        source: /tmp/viddlws/downloads
+        target: /viddlws/downloads
+    ports: []
+    entrypoint: /celery-entrypoint
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    image: viddlws_local_celerybeat
+    container_name: viddlws_local_celerybeat
+    depends_on:
+      - redis
+      - viddlwspostgres
+    ports: []
+    entrypoint: /celery-entrypoint
+    command: /start-celerybeat
+
+  flower:
+    <<: *django
+    image: viddlws_local_flower
+    container_name: viddlws_local_flower
+    ports:
+      - "5555:5555"
+    entrypoint: /celery-entrypoint
+    command: /start-flower
