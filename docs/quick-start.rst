@@ -37,6 +37,7 @@ Quick Start
 
     # make sure that the downloads directory exists
     sudo mkdir -p /viddlws/downloads
+    sudo chown 101: /viddlws/downloads/
 
     # startup ViddlWS for the first time
     docker-compose -f production-behind-proxy.yml pull
