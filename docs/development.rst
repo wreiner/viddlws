@@ -5,7 +5,8 @@ Development Documentation
 
 .. toctree::
    :maxdepth: 4
-   :caption: Deployment:
+   :caption: Development:
 
+   development-setup
    core
    users
