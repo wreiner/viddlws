@@ -13,6 +13,12 @@ ViddlWS (Video Download Web Service) is a Django project which uses [yt_dlp](htt
 * Tag the downloaded items
 * Subscribe to a podcast feed of tagged items
 
+## Screenshots
+
+| ![alt text](screenshots/video-overview.png "Video Overview")    | ![alt text](screenshots/tag-list.png "Tag List") | ![alt text](screenshots/subscribe-to-tag.png "Subscribe to tag feed") |
+|---------------------------------------------------------------------|:--------------------------------------------------------------------:|:---------------------------------------------------------------------:|
+| ![alt text](screenshots/video-playback.png "Video Playback") | ![alt text](screenshots/audio-playback.png "Audio Playback") |     ![alt text](screenshots/add-video-form.png "Add Video Form")     |
+
 ## Documentation
 
 The documentation can be found in the docs folder.
