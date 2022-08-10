@@ -10,4 +10,4 @@ build:
 
 python:
   install:
-    - requirements: requirements/docs.txt
+    - requirements: requirements/local.txt
