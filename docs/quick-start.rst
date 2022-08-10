@@ -43,6 +43,9 @@ Quick Start
     docker-compose -f production-behind-proxy.yml pull
     docker-compose -f production-behind-proxy.yml up
 
+    # the initial admin user password will be echo'ed in the django container logs
+    docker logs viddlws_django_1 2>&1| grep "New admin password:"
+
     # change site domain in admin gui
     # open https://my.fqdn.com/${ADMIN_URL}/
     # navigate to Sites and change domain.com entry

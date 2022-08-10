@@ -2,6 +2,7 @@
 
 ViddlWS (Video Download Web Service) is a Django project which uses [yt_dlp](https://github.com/yt-dlp/yt-dlp) to archive videos from various sites like YouTube and create podcast feeds from them.
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
@@ -56,6 +57,9 @@ sudo chown 101: /viddlws/downloads/
 # startup ViddlWS for the first time
 docker-compose -f production-behind-proxy.yml pull
 docker-compose -f production-behind-proxy.yml up
+
+# the initial admin user password will be echo'ed in the django container logs
+docker logs viddlws_django_1 2>&1| grep "New admin password:"
 
 # change site domain in admin gui
 # open https://my.fqdn.com/${ADMIN_URL}/

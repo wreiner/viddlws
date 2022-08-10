@@ -13,6 +13,7 @@ Examples for those files can be found in `envfiles-examples/`.
 Most settings should be pretty self explainatory.
 
 Replace all occurences of values that start and end with: `<>`
+For an example on how to set these values refer to :ref:`quick-start`.
 
 For settings which are not
 widely known see the following table for an explaination:
@@ -35,6 +36,18 @@ To generate such a secret key run:
 
     python -c "import secrets; print(secrets.token_urlsafe())"
 
+=======================
+Initial admin password
+=======================
+
+On the first start of the Django docker container an initial admin password
+will be generated and echo'ed into the logs.
+
+Please change the password as soon as possible.
+
+At the time of writing it is not yet possible to set the initial admin password
+manually.
+
 ================
 Downloads volume
 ================
@@ -45,6 +58,12 @@ the respective host-path to the volumes for the services which need access to
 this volume.
 
 Default host-path is `/viddlws/downloads`.
+
+The django containers use UID/GID of 101 so set the permissions accordingly:
+
+.. code-block:: bash
+
+    sudo chown 101:101 /viddlws/downloads
 
 If the download path should be different, replace this value with the value of
 choice in the docker-compose files. For further information see the Docker
