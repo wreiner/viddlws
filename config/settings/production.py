@@ -147,5 +147,12 @@ LOGGING = {
     },
 }
 
+# Celery Config
+# ------------------------------------------------------------------------------
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-time-limit
+CELERY_TASK_TIME_LIMIT = env.int("CELERY_TASK_TIME_LIMIT")
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-soft-time-limit
+CELERY_TASK_SOFT_TIME_LIMIT = env.int("CELERY_TASK_SOFT_TIME_LIMIT")
+
 # Your stuff...
 # ------------------------------------------------------------------------------

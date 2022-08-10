@@ -40,6 +40,12 @@ REDIS_URL=redis://redis:6379/0
 # Celery
 # ------------------------------------------------------------------------------
 
+# Worker
+# The time limit parameters set a maximum time limit a celery task (downloading)
+# media is allowed to take. After the limit is reached the task will be aborted.
+CELERY_TASK_TIME_LIMIT=600
+CELERY_TASK_SOFT_TIME_LIMIT=600
+
 # Flower
 CELERY_FLOWER_USER=flower
 CELERY_FLOWER_PASSWORD=<set-password>
