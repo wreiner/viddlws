@@ -19,3 +19,5 @@
 * [] add ability to switch between self hosted mail and [anymail](https://anymail.dev/en/stable/)
 * [] add ability to set initial admin password from env
 * [] add Helm chart
+* [] option to retry download
+* [] add search

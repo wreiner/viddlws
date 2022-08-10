@@ -21,7 +21,7 @@ ViddlWS (Video Download Web Service) is a Django project which uses [yt_dlp](htt
 
 ## Documentation
 
-The documentation can be found in the docs folder.
+The documentation can be found in the docs folder or on [ViddlWS - Read The Docs](https://viddlws.readthedocs.io/en/latest/index.html).
 
 ## Quick start
 

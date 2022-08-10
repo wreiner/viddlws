@@ -8,3 +8,4 @@ Installation
    :caption: Installation:
 
    prod-install
+   development-setup
