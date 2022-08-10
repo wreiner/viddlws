@@ -10,7 +10,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
-    image: viddlws_production_django
+    image: wreiner/viddlws_production_django:2.0RC1
     platform: linux/x86_64
     depends_on:
       - postgres
@@ -26,7 +26,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: viddlws_production_postgres
+    image: wreiner/viddlws_production_postgres:2.0RC1
     volumes:
       - production_postgres_data:/var/lib/postgresql/data:Z
       - production_postgres_data_backups:/backups:z
@@ -37,7 +37,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/nginx/Dockerfile
-    image: viddlws_production_nginx
+    image: wreiner/viddlws_production_nginx:2.0RC1
     volumes:
       - /viddlws/downloads:/viddlws/downloads
     depends_on:
@@ -50,7 +50,7 @@ services:
 
   celeryworker:
     <<: *django
-    image: viddlws_production_celeryworker
+    image: wreiner/viddlws_production_celeryworker:2.0RC1
     volumes:
       - /viddlws/downloads:/viddlws/downloads
     entrypoint: /celery-entrypoint
@@ -58,13 +58,13 @@ services:
 
   celerybeat:
     <<: *django
-    image: viddlws_production_celerybeat
+    image: wreiner/viddlws_production_celerybeat:2.0RC1
     entrypoint: /celery-entrypoint
     command: /start-celerybeat
 
   flower:
     <<: *django
-    image: viddlws_production_flower
+    image: wreiner/viddlws_production_flower:2.0RC1
     entrypoint: /celery-entrypoint
     command: /start-flower
     ports:
