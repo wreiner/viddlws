@@ -17,3 +17,5 @@
 * [] replace url with path/re_path due to url deprecation
 * [X] fix sending confirmation email
 * [] add ability to switch between self hosted mail and [anymail](https://anymail.dev/en/stable/)
+* [] add ability to set initial admin password from env
+* [] add Helm chart
