@@ -158,9 +158,9 @@ class Video(models.Model):
             VideoStatus.objects.get(status="new"),
             VideoStatus.objects.get(status="inprogress"),
         ):
-            return static("inprogress.jpg")
+            return static("images/inprogress.jpg")
 
-        return static("placeholder-thumbnail.jpg")
+        return static("images/placeholder-thumbnail.jpg")
 
     def audiofile(self):
         name, extension = os.path.splitext(self.filename)

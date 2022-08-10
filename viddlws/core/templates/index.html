@@ -67,7 +67,7 @@
 		    {% endif %}
 		    <div class="col-md-4 portfolio-item">
                 <div class="card" style="width: 20vw;">
-                    <a href="/v/{{video.id}}/"><img src="/downloads/{{video.thumbnailfile}}" class="card-img-top" alt="..."></a>
+                    <a href="/v/{{video.id}}/"><img src="{% if '/static' in video.thumbnailfile %}{{video.thumbnailfile}}{% else %}/downloads/{{video.thumbnailfile}}{% endif %}" class="card-img-top" alt="..."></a>
                     <div class="card-body">
                       <h5 class="card-title list-title truncate"><a href="/v/{{video.id}}/">{{video.title}}</a></h5>
                       <p class="card-text list-title truncate">{{ video.original_data.title }}</p>
