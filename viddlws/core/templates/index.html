@@ -90,33 +90,37 @@
 	{% endif %}
         <!-- /.row -->
 
-        <div class="row mt-5"></div>
-
         <!-- Pagination -->
         {% if is_paginated %}
+        <div class="row mt-5"></div>
         <div class="row text-center">
             <div class="col-lg-12">
-                <ul class="pagination pagination-centered">
+                <div class="btn-group" role="group" aria-label="Item pagination">
+
                     {% if page_obj.has_previous %}
-                    <li>
-                        <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
-                    </li>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">&laquo;</a>
                     {% endif %}
                     {% for page in paginator.page_range %}
-                    <li {% if page == page_obj.number %}class="active"{% endif %}>
-                        <a href="{{ request.path }}?page={{ page }}">{{ page }}</a>
-                    </li>
+                    {% if page == page_obj.number %}
+                    <button class="btn btn-outline-dark active">
+                        <span>{{ page }}</span>
+                    </button>
+                    {% else %}
+                    <a href="?page={{ page }}" class="btn btn-outline-dark">
+                        {{ page }}
+                    </a>
+                    {% endif %}
                     {% endfor %}
                     {% if page_obj.has_next %}
-                    <li>
-                        <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
-                    </li>
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">&raquo;</a>
                     {% endif %}
-                </ul>
+                </div>
             </div>
         </div>
         {% endif %}
         <!-- /.row -->
+
+        <div class="row mt-5"></div>
     </div>
 
     <script>

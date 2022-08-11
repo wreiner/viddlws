@@ -13,7 +13,7 @@
 * [] skip forward/backwards by double tapping on video
 * [] better looking audio player
 * [] better looking video playing page
-* [] fix pagination in list view
+* [X] fix pagination in list view
 * [] replace url with path/re_path due to url deprecation
 * [X] fix sending confirmation email
 * [] add ability to switch between self hosted mail and [anymail](https://anymail.dev/en/stable/)
@@ -21,3 +21,5 @@
 * [] add Helm chart
 * [] option to retry download
 * [] add search
+* [] add link to admin interface for superusers
+* [] add doc how to reset admin password
