@@ -13,3 +13,4 @@ Welcome to ViddlWS's documentation!
    quick-start
    installation
    development
+   faq

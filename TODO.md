@@ -22,4 +22,4 @@
 * [] option to retry download
 * [] add search
 * [X] add link to admin interface for superusers
-* [] add doc how to reset admin password
+* [X] add doc how to reset admin password
