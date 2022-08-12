@@ -21,5 +21,5 @@
 * [] add Helm chart
 * [] option to retry download
 * [] add search
-* [] add link to admin interface for superusers
+* [X] add link to admin interface for superusers
 * [] add doc how to reset admin password
