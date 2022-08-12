@@ -11,7 +11,6 @@ services:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
     image: wreiner/viddlws_production_django:2.0RC1
-    platform: linux/x86_64
     depends_on:
       - postgres
       - redis
