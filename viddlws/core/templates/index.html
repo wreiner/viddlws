@@ -55,40 +55,40 @@
         <hr>
 
         <!-- Projects Row -->
-	{% if videos %}
-		{% for video in videos %}
-		    {% if forloop.counter0|divisibleby:3 %}
-			{% if not forloop.first %}
-			    </div>
-                <div class="row mt-5">
-                {% else %}
-                <div class="row mt-3">
-			{% endif %}
-		    {% endif %}
-		    <div class="col-md-4 portfolio-item">
-                <div class="card" style="width: 20vw;">
-                    <a href="/v/{{video.id}}/"><img src="{% if '/static' in video.thumbnailfile %}{{video.thumbnailfile}}{% else %}/downloads/{{video.thumbnailfile}}{% endif %}" class="card-img-top" alt="..."></a>
-                    <div class="card-body">
-                      <h5 class="card-title list-title truncate"><a href="/v/{{video.id}}/">{{video.title}}</a></h5>
-                      <p class="card-text list-title truncate">{{ video.original_data.title }}</p>
-                      <p class="card-text truncate">{{ video.original_data.description }}</p>
-                      <p>
-                        {% for tag in video.tags_display %}
-                        <a href="/tags/{{tag.slug}}"><span class="badge rounded-pill text-bg-info">{{tag}}</span></a>
-                        {% endfor %}
-                    </p>
+        {% if videos %}
+            {% for video in videos %}
+                {% if forloop.counter0|divisibleby:3 %}
+                {% if not forloop.first %}
                     </div>
-                  </div></a>
-		    </div>
-		{% endfor %}
-		{% if not forloop.last %}
-		    </div>
-		{% endif %}
-	{% else %}
-		<p>You haven't downloaded any videos yet.</p>
-		<p><a href="/add_video/">Add a video</a></p>
-	{% endif %}
-        <!-- /.row -->
+                    <div class="row">
+                    {% else %}
+                    <div class="row mt-5">
+                {% endif %}
+                {% endif %}
+                <div class="col-md mt-3">
+                    <div class="card">
+                        <a href="/v/{{video.id}}/"><img src="{% if '/static' in video.thumbnailfile %}{{video.thumbnailfile}}{% else %}/downloads/{{video.thumbnailfile}}{% endif %}" class="card-img-top" alt="..."></a>
+                        <div class="card-body">
+                        <h5 class="card-title list-title truncate"><a href="/v/{{video.id}}/">{{video.title}}</a></h5>
+                        <p class="card-text list-title truncate">{{ video.original_data.title }}</p>
+                        <p class="card-text truncate">{{ video.original_data.description }}</p>
+                        <p>
+                            {% for tag in video.tags_display %}
+                            <a href="/tags/{{tag.slug}}"><span class="badge rounded-pill text-bg-info">{{tag}}</span></a>
+                            {% endfor %}
+                        </p>
+                        </div>
+                    </div></a>
+                </div>
+            {% endfor %}
+            {% if not forloop.last %}
+                </div>
+            {% endif %}
+        {% else %}
+            <p>You haven't downloaded any videos yet.</p>
+            <p><a href="/add_video/">Add a video</a></p>
+        {% endif %}
+
 
         <!-- Pagination -->
         {% if is_paginated %}

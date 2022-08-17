@@ -9,17 +9,17 @@
 * [X] create view to display subscription link
 * [X] add speed control to player
 * [X] make video div smaller, CSS not working
-* [] use html video tag instead of video.js?
-* [] skip forward/backwards by double tapping on video
-* [] better looking audio player
-* [] better looking video playing page
+* [ ] use html video tag instead of video.js?
+* [ ] skip forward/backwards by double tapping on video
+* [ ] better looking audio player
+* [ ] better looking video playing page
 * [X] fix pagination in list view
-* [] replace url with path/re_path due to url deprecation
+* [ ] replace url with path/re_path due to url deprecation
 * [X] fix sending confirmation email
-* [] add ability to switch between self hosted mail and [anymail](https://anymail.dev/en/stable/)
-* [] add ability to set initial admin password from env
-* [] add Helm chart
-* [] option to retry download
-* [] add search
+* [ ] add ability to switch between self hosted mail and [anymail](https://anymail.dev/en/stable/)
+* [ ] add ability to set initial admin password from env
+* [ ] add Helm chart
+* [ ] option to retry download
+* [ ] add search
 * [X] add link to admin interface for superusers
 * [X] add doc how to reset admin password
