@@ -20,11 +20,17 @@ a:link {
   border-color: #eed3d7;
 }
 
-.truncate {
-  width: 18vw;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.col-md {
+  min-width: 2px;
+}
+
+
+.card-title{
+  min-width: 2px;
+}
+
+.card-text{
+  min-width: 2px;
 }
 
 .list-title {

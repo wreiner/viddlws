@@ -66,12 +66,12 @@
                 {% endif %}
                 {% endif %}
                 <div class="col-md mt-3">
-                    <div class="card">
+                    <div class="card h-100">
                         <a href="/v/{{video.id}}/"><img src="{% if '/static' in video.thumbnailfile %}{{video.thumbnailfile}}{% else %}/downloads/{{video.thumbnailfile}}{% endif %}" class="card-img-top" alt="..."></a>
                         <div class="card-body">
-                        <h5 class="card-title list-title truncate"><a href="/v/{{video.id}}/">{{video.title}}</a></h5>
-                        <p class="card-text list-title truncate">{{ video.original_data.title }}</p>
-                        <p class="card-text truncate">{{ video.original_data.description }}</p>
+                        <h5 class="card-title list-title text-truncate"><a href="/v/{{video.id}}/">{{video.title}}</a></h5>
+                        <p class="card-text list-title text-truncate">{{ video.original_data.title }}</p>
+                        <p class="card-text text-truncate">{{ video.original_data.description }}</p>
                         <p>
                             {% for tag in video.tags_display %}
                             <a href="/tags/{{tag.slug}}"><span class="badge rounded-pill text-bg-info">{{tag}}</span></a>
