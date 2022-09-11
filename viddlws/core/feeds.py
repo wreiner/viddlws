@@ -1,6 +1,7 @@
 import os
 
 import sesame.utils
+from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
 from django.urls import reverse
@@ -16,6 +17,12 @@ class MediaFeed(Feed):
     """
     Feed class to provide data for RSS feed
     """
+
+    def get_context_data(self, **kwargs):
+        setattr(
+            self, "request", kwargs["request"]
+        )  # to access the request object later
+        return super().get_context_data(**kwargs)
 
     def _get_filesize_in_bytes(self, filepath):
         """
@@ -107,19 +114,28 @@ class MediaFeed(Feed):
         """
         Returns the enclosure element for the item in the feed.
         """
-        # FIXME add host part, always replace extension with mp3?
-        enc_url = item.filename
 
+        # set standard mime_type
+        mime_type = "audio/mpeg"
+        if item.audio_only or item.extract_audio:
+            current_site = Site.objects.get_current()
+            mime_type = item.audiotype()
+            item.filename = item.audiofile()
+        else:
+            mime_type = item.videotype()
+
+        enc_url = (
+            f"{self.request.scheme}://{current_site.domain}/downloads/{item.filename}"
+        )
         filepath = "{}/{}".format(
             get_setting_or_default("video_download_dir", "/tmp"), item.filename
         )
 
         if enc_url:
-            # FIXME mime type may not be correct for video items
             enc = feedgenerator.Enclosure(
                 url=str(enc_url),
                 length=str(self._get_filesize_in_bytes(filepath)),
-                mime_type="audio/mpeg",
+                mime_type=mime_type,
             )
             return [enc]
         return []
