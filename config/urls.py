@@ -17,7 +17,8 @@ from viddlws.core.views import (
     VideoDetail,
     VideoListView,
     VideoUpdate,
-    create_sesame_token,
+    create_sesame_token_view,
+    systeminfo_view,
 )
 
 urlpatterns = [
@@ -50,7 +51,8 @@ urlpatterns = [
         VideoListView.as_view(),
     ),
     url(r"^feed/(?P<slug>[-\w]+)/", MediaFeed()),
-    url(r"^create_sesame_token/(?P<slug>[-\w]+)/", create_sesame_token),
+    url(r"^create_sesame_token/(?P<slug>[-\w]+)/", create_sesame_token_view),
+    path("system_info", systeminfo_view, name="system_info"),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),

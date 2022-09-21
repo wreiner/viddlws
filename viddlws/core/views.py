@@ -32,6 +32,7 @@ from sesame.utils import get_token
 from taggit.models import Tag
 
 from viddlws.core.forms import VideoAddForm, VideoEditForm
+from viddlws.core.functions import get_download_filesystem_usage, get_setting_or_default
 from viddlws.core.models import Video, VideoStatus
 
 # Get an instance of the logger
@@ -202,7 +203,19 @@ class VideoDelete(LoginRequiredMixin, DeleteView):
 
 
 @login_required
-def create_sesame_token(request, slug):
+def systeminfo_view(request):
+    video_download_dir = get_setting_or_default("video_download_dir", "/tmp")
+
+    context = {
+        "filesystem_usage": get_download_filesystem_usage(video_download_dir),
+        "viddlws_version": "0.1.0RC1",
+    }
+
+    return render(request, "system-info.html", context)
+
+
+@login_required
+def create_sesame_token_view(request, slug):
     sesame_token = f"?sesame={get_token(request.user)}"
     current_site = Site.objects.get_current()
 
