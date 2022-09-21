@@ -208,7 +208,7 @@ def systeminfo_view(request):
 
     context = {
         "filesystem_usage": get_download_filesystem_usage(video_download_dir),
-        "viddlws_version": "0.1.0RC1",
+        "viddlws_version": "2.0.0RC1",
     }
 
     return render(request, "system-info.html", context)
