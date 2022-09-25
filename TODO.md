@@ -20,6 +20,21 @@
 * [ ] add ability to set initial admin password from env
 * [ ] add Helm chart
 * [ ] option to retry download
+* [ ] error handling on video download
 * [ ] add search
 * [X] add link to admin interface for superusers
 * [X] add doc how to reset admin password
+* [ ] add ability to download playlists
+  * viddlws playlist vs remote playlist?
+  * remote playlist - should it be possible to remove items/resort items?
+  * remote playlist - auto download new videos from remote? how to notify user about new items?
+  * should playlists be subscribal? what happens if the playlist is resorted?
+* [ ] subscribe to channel
+  * only auto download videos with regex on original title
+  * how to notify user about new downloads?
+* [X] show used and free space on the mount point used for downloads
+  * https://stackoverflow.com/a/39799743
+  * https://stackoverflow.com/questions/5194057/better-way-to-convert-file-sizes-in-python
+  * [X] show as values
+  * [X] show as small graph
+* [ ] add the possibility to make certain video/audio content publicly available without need to be logged in?
