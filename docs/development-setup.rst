@@ -42,6 +42,18 @@ To prefill the VideoStatus and KeyValueSettings tables run:
   docker-compose -f local.yml run --rm django python manage.py loaddata --app core VideoStatus.json
   docker-compose -f local.yml run --rm django python manage.py loaddata --app core KeyValueSettings.json
 
+=================
+pre-commit hooks
+=================
+
+This project uses pre-commit hooks configured in `.pre-commit-config.yaml`.
+
+To install the scripts run:
+
+.. code-block:: bash
+
+  pre-commit install
+
 ==============
 Test coverage
 ==============
